@@ -60,6 +60,10 @@ data = [[1,2,3,0],
         [3,4,1,2],
         [0,1,2,3],
         [2,0,4,1]]
+data2 = [[1,2,0,0],
+        [3,4,1,2],
+        [0,1,2,3],
+        [2,0,4,1]]
 columns = []
 def column_maker(rows):
     for n in range(4):
@@ -79,14 +83,18 @@ def missing_num_row_and_col(data):
             if data[n][m] == 0:
                 for x in range(4):
                     if columns[m][x] == 0:
-                        print("found match at row: ", n," column: ", m)
+                        for y in range(4):
+                            if possible_numbers[y] not in data[n] and possible_numbers[y] not in columns[m]:
+                                data[n].pop(m)
+                                data[n].insert(m, possible_numbers[y])
                         continue
                     continue
                 continue
             continue
         continue
-
+    print(data)
 missing_num_row_and_col(data)
+missing_num_row_and_col(data2)
 #Now we have the ability to identify the column that the missing number is, given only the row. Next we need to insert that number
 
 #Loop through a row, find the 0

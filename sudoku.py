@@ -70,12 +70,24 @@ def column_maker(rows):
         columns.insert(n, column)
         continue
     return columns
-    
+
 def missing_num_row_and_col(data):
+    possible_numbers = [1,2,3,4]
     column_maker(data)
-    print(columns)
-    #for row in range(4)
+    for n in range(4):
+        for m in range(4):
+            if data[n][m] == 0:
+                for x in range(4):
+                    if columns[m][x] == 0:
+                        print("found match at row: ", n," column: ", m)
+                        continue
+                    continue
+                continue
+            continue
+        continue
+
 missing_num_row_and_col(data)
+#Now we have the ability to identify the column that the missing number is, given only the row. Next we need to insert that number
 
 #Loop through a row, find the 0
 #If no 0's, next row

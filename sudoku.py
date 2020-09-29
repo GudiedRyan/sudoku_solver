@@ -117,7 +117,7 @@ def missing_num_row_and_col(data):
 #Box logic will be necessary to determine when items numbers can't be found
 boxes = [[],[],[],[]]
 def create_boxes(data):
-    column_maker(data)
+    "Creates the boxes"
     for n in range(2):
         for m in range(2):
             boxes[0].append(data[n][m])
@@ -138,3 +138,74 @@ def create_boxes(data):
 
 #create_boxes(data)
 #We now have functions that can generate columns and rows based off of an input of rows
+
+#Phase IV and a half:
+#A quick function to determine which box to check based on the row and column of an element
+def which_box(n,m):
+    if n in range(2) and m in range(2):
+        return 0
+    elif n in range(2) and m in range(2,4):
+        return 1
+    elif n in range(2,4) and m in range(2):
+        return 2
+    else:
+        return 3
+
+
+#Phase V:
+#Now finally we're putting it all together to try to solve a 4x4 puzzle. Once this is done, we can implement it on a 
+# larger scale for the 9x9 boards
+
+rows = [[0,0,2,0],
+        [1,0,0,0],
+        [0,3,0,0],
+        [0,0,4,0]]
+possible_numbers = [1,2,3,4]
+
+def solver(rows):
+    loops = 0
+    candidates = []
+    create_boxes(rows)
+    column_maker(rows)
+    b = 0 #This determines which box to check
+    for n in range(4):
+        for m in range(4):
+            if rows[n][m] == 0:
+                b = which_box(n,m)
+                #print(rows[n][m],"n:",n,"m:",m,"b:",b) #Identifies the 0's and the row, column, and box correctly
+                for r in range(4):
+                    if possible_numbers[r] not in rows[n] and possible_numbers[r] not in columns[m] and possible_numbers[r] not in boxes[b]:
+                        #print(possible_numbers[r],"is not in", rows[n], columns[m], boxes[b]) #This works too
+                        candidates.append(possible_numbers[r])
+                        continue
+                    continue
+            if len(candidates) == 1:
+                rows[n].pop(m)
+                rows[n].insert(m,candidates[0])
+                candidates.clear()
+                continue
+            else:
+                candidates.clear()
+                continue
+            continue
+        continue
+    candidates.clear()
+    print(rows)
+    for x in range(4):
+        if 0 in rows[x] and loops < 2:
+            loops += 1
+            solver(rows)
+        else:
+            break
+    return rows             
+
+# solver([[1,0,0,4],
+#         [4,3,2,1],
+#         [3,1,4,2],
+#         [2,4,1,3]])
+# solver(data)
+
+solver(rows)
+
+# Note: It now will solve the hardest puzzle, however, at this point it still cannot do more than one test.
+# Need to bug test.

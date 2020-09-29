@@ -64,6 +64,14 @@ data2 = [[1,2,0,0],
         [3,4,1,2],
         [0,1,2,3],
         [2,0,4,1]]
+data3 = [[1,2,0,0],
+        [0,4,1,2],
+        [0,1,0,3],
+        [2,0,4,1]]
+data4 = [[1,0,0,4],
+        [0,0,0,2],
+        [0,1,0,3],
+        [2,0,4,0]]
 columns = []
 def column_maker(rows):
     for n in range(4):
@@ -93,11 +101,40 @@ def missing_num_row_and_col(data):
             continue
         continue
     print(data)
-missing_num_row_and_col(data)
-missing_num_row_and_col(data2)
+# missing_num_row_and_col(data)
+# missing_num_row_and_col(data2)
+# missing_num_row_and_col(data3)
+# missing_num_row_and_col(data4)
+#data, data2, and data3 are solved correctly. data4 is not.
 #Now we have the ability to identify the column that the missing number is, given only the row. Next we need to insert that number
 
 #Loop through a row, find the 0
 #If no 0's, next row
 #If 0,take that index and run through the column with that index to find what numbers are in there.
 #Find number that's not in either.
+
+#Phase IV: Box logic
+#Box logic will be necessary to determine when items numbers can't be found
+boxes = [[],[],[],[]]
+def create_boxes(data):
+    column_maker(data)
+    for n in range(2):
+        for m in range(2):
+            boxes[0].append(data[n][m])
+            continue
+    for n in range(2):
+        for m in range(2,4):
+            boxes[1].append(data[n][m])
+            continue
+    for n in range(2,4):
+        for m in range(2):
+            boxes[2].append(data[n][m])
+            continue
+    for n in range(2,4):
+        for m in range(2,4):
+            boxes[3].append(data[n][m])
+            continue
+    return boxes
+
+#create_boxes(data)
+#We now have functions that can generate columns and rows based off of an input of rows

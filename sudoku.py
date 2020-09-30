@@ -190,20 +190,25 @@ def solver(rows):
             continue
         continue
     candidates.clear()
-    print(rows)
     for x in range(4):
         if 0 in rows[x] and loops < 2:
             loops += 1
             solver(rows)
         else:
             break
+    print(rows)
+    columns.clear()
+    boxes[0].clear()
+    boxes[1].clear()
+    boxes[2].clear()
+    boxes[3].clear()
     return rows             
 
-# solver([[1,0,0,4],
-#         [4,3,2,1],
-#         [3,1,4,2],
-#         [2,4,1,3]])
-# solver(data)
+solver([[1,0,0,4],
+        [4,3,2,1],
+        [3,1,4,2],
+        [2,4,1,3]])
+solver(data)
 
 solver(rows)
 

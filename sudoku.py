@@ -161,9 +161,8 @@ rows = [[0,0,2,0],
         [0,3,0,0],
         [0,0,4,0]]
 possible_numbers = [1,2,3,4]
-
-def solver(rows):
-    loops = 0
+loops = 0
+def solver(rows, loops):
     candidates = []
     create_boxes(rows)
     column_maker(rows)
@@ -193,7 +192,7 @@ def solver(rows):
     for x in range(4):
         if 0 in rows[x] and loops < 2:
             loops += 1
-            solver(rows)
+            solver(rows, loops)
         else:
             break
     print(rows)
@@ -204,13 +203,16 @@ def solver(rows):
     boxes[3].clear()
     return rows             
 
-solver([[1,0,0,4],
-        [4,3,2,1],
-        [3,1,4,2],
-        [2,4,1,3]])
-solver(data)
+# solver([[1,0,0,4],
+#        [4,3,2,1],
+ #       [3,1,4,2],
+  #      [2,4,1,3]])
+# solver(data)
 
-solver(rows)
+# solver(rows)
+solver([[1,0,0,0],
+        [2,0,4,0],
+        [0,0,3,0],
+        [0,1,0,0]], 1)
+solver([[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],0)
 
-# Note: It now will solve the hardest puzzle, however, at this point it still cannot do more than one test.
-# Need to bug test.

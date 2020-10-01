@@ -22,7 +22,7 @@ test_solution = [[5,3,4,6,7,8,9,1,2],
 #If change count doesnt increase, end
 
 columns = []
-boxes = []
+boxes = [[],[],[],[],[],[],[],[],[]]
 def create_columns(rows):
     "Translates the rows into columns"
     for n in range(9):
@@ -33,4 +33,38 @@ def create_columns(rows):
         columns.insert(n, column)
         continue
     return columns
-print(create_columns(test_puzzle_rows))
+
+def create_boxes(rows):
+    "Translates the rows into the respective boxes"
+    for n in range(3):
+        for m in range(3):
+            boxes[0].append(rows[n][m])
+            continue
+        for m in range(3,6):
+            boxes[1].append(rows[n][m])
+            continue
+        for m in range(6,9):
+            boxes[2].append(rows[n][m])
+            continue
+    for n in range(3,6):
+        for m in range(3):
+            boxes[3].append(rows[n][m])
+            continue
+        for m in range(3,6):
+            boxes[4].append(rows[n][m])
+            continue
+        for m in range(6,9):
+            boxes[5].append(rows[n][m])
+            continue
+    for n in range(6,9):
+        for m in range(3):
+            boxes[6].append(rows[n][m])
+            continue
+        for m in range(3,6):
+            boxes[7].append(rows[n][m])
+            continue
+        for m in range(6,9):
+            boxes[8].append(rows[n][m])
+            continue
+    return boxes
+

@@ -74,6 +74,7 @@ data4 = [[1,0,0,4],
         [2,0,4,0]]
 columns = []
 def column_maker(rows):
+    "Translates the rows into columns"
     for n in range(4):
         column = []
         for m in range(4):
@@ -142,6 +143,7 @@ def create_boxes(data):
 #Phase IV and a half:
 #A quick function to determine which box to check based on the row and column of an element
 def which_box(n,m):
+    "Determines which elements go in which box"
     if n in range(2) and m in range(2):
         return 0
     elif n in range(2) and m in range(2,4):
@@ -163,6 +165,7 @@ rows = [[0,0,2,0],
 possible_numbers = [1,2,3,4]
 loops = 0
 def solver(rows, loops):
+    "Solves the 4x4 sudoku puzzle; it it's unsolveable, it quits"
     candidates = []
     create_boxes(rows)
     column_maker(rows)
@@ -195,7 +198,7 @@ def solver(rows, loops):
             solver(rows, loops)
         else:
             break
-    print(rows)
+    #print(rows)
     columns.clear()
     boxes[0].clear()
     boxes[1].clear()
@@ -209,10 +212,10 @@ def solver(rows, loops):
   #      [2,4,1,3]])
 # solver(data)
 
-# solver(rows)
-solver([[1,0,0,0],
-        [2,0,4,0],
-        [0,0,3,0],
-        [0,1,0,0]], 1)
-solver([[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],0)
+print(solver(rows,0))
+print(solver([[1,0,0,0],
+       [2,0,4,0],
+       [0,0,3,0],
+       [0,1,0,0]], 0))
+print(solver([[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],5))
 

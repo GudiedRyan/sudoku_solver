@@ -68,3 +68,79 @@ def create_boxes(rows):
             continue
     return boxes
 
+def identify_box(n,m):
+    "Determines which elements correspond to which box"
+    if n in range(3):
+        if m in range(3):
+            return 0
+        elif m in range(3,6):
+            return 1
+        elif m in range(6,9):
+            return 2
+    elif n in range(3,6):
+        if m in range(3):
+            return 3
+        elif m in range(3,6):
+            return 4
+        elif m in range(6,9):
+            return 5
+    elif n in range(6,9):
+        if m in range(3):
+            return 6
+        elif m in range(3,6):
+            return 7
+        elif m in range(6,9):
+            return 8
+
+# def box_checker(rows):
+#     for n in range(9):
+#         for m in range(9):
+#             b = identify_box(n,m)
+#             print(b)
+#             continue
+
+possible_numbers = [1,2,3,4,5,6,7,8,9]
+
+def solver(rows, changes):
+    "Solves the sudoku puzzle, ideally"
+    changes = 0
+    candidates = []
+    create_boxes(rows)
+    create_columns(rows)
+    b = 0
+    for n in range(9):
+        for m in range(9):
+            if rows[n][m] == 0:
+                b = identify_box(n,m)
+                for r in range(9):
+                    if possible_numbers[r] not in rows[n] and possible_numbers[r] not in columns[m] and possible_numbers not in boxes[b]:
+                        candidates.append(possible_numbers[r])
+                        continue
+                    continue
+                print(candidates)
+                if len(candidates) == 1:
+                    rows[n].pop(m)
+                    rows[n].insert(m,candidates[0])
+                    candidates.clear()
+                    changes += 1
+                    continue
+                else:
+                    candidates.clear()
+                    continue
+                continue
+            continue
+        continue
+    candidates.clear()
+    for y in range(9):
+        if 0 in rows[y] and changes != 0:
+            #print(changes)
+            solver(rows, changes)
+        else:
+            #print(changes)
+            break
+    columns.clear()
+    for x in range(9):
+        boxes[x].clear()
+        continue
+    return rows
+print(solver(test_puzzle_rows, 0))

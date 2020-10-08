@@ -212,10 +212,26 @@ def solver(rows, loops):
   #      [2,4,1,3]])
 # solver(data)
 
-print(solver(rows,0))
-print(solver([[1,0,0,0],
-       [2,0,4,0],
-       [0,0,3,0],
-       [0,1,0,0]], 0))
-print(solver([[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],5))
+# print(solver(rows,0))
+# print(solver([[1,0,0,0],
+#        [2,0,4,0],
+#        [0,0,3,0],
+#        [0,1,0,0]], 0))
+# print(solver([[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],5))
 
+
+zero_location = []
+def zero_finder(n,m,b):
+    "Creates the index for each 0 in the matrix, where n is the row, m is the column, and b is the box"
+    entry = [n,m,b]
+    zero_location.append(entry)
+    return zero_location
+print(zero_finder(1,3,4))
+print(zero_finder(4,1,5))
+
+def better_solver(rows):
+    "Solver with backtracking approach"
+    candidates = []
+    create_boxes(rows)
+    column_maker(rows)
+    b = 0 #This determines which box to check

@@ -226,8 +226,8 @@ def zero_finder(n,m,b):
     entry = [n,m,b]
     zero_location.append(entry)
     return zero_location
-print(zero_finder(1,3,4))
-print(zero_finder(4,1,5))
+#print(zero_finder(1,3,4))
+#print(zero_finder(4,1,5))
 
 def better_solver(rows):
     "Solver with backtracking approach"
@@ -235,3 +235,29 @@ def better_solver(rows):
     create_boxes(rows)
     column_maker(rows)
     b = 0 #This determines which box to check
+    a = 0
+    for n in range(4):
+        for m in range(4):
+            if rows[n][m] == 0:
+                b = which_box(n,m)
+                a = zero_finder(n,m,b)
+                for r in range(4):
+                    if possible_numbers[r] not in rows[n] and possible_numbers[r] not in columns[m] and possible_numbers[r] not in boxes[b]:
+                        candidates.append(possible_numbers[r])
+                    continue
+                if len(candidates) == 1:
+                    rows[n].pop(m)
+                    rows[n].insert(m, candidates[0])
+                    create_boxes(rows)
+                    column_maker(rows)
+                    break
+                rows[n].pop(m)
+                rows[n].insert(m,candidates[0])
+                candidates.pop(0)
+                c = candidates.copy()
+                candidates.clear()
+                
+
+                #From here we can backtrack to the zero we made the change with
+    
+better_solver(rows)

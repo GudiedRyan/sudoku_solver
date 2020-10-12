@@ -168,7 +168,8 @@ def solver(rows):
 #print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 0, 9, 2, 0, 3, 4, 5, 0], [1, 8, 4, 5, 3, 7, 9, 2, 0], [7, 5, 6, 0, 0, 9, 0, 4, 0], [2, 9, 3, 4, 1, 6, 7, 8, 5], [5, 6, 8, 9, 4, 2, 1, 7, 3], [9, 2, 7, 3, 0, 1, 0, 6, 4], [3, 0, 1, 6, 0, 5, 8, 9, 0]]))
 #print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 1, 9, 2, 0, 3, 4, 5, 0], [1, 8, 4, 5, 3, 7, 9, 2, 6], [7, 5, 6, 8, 0, 9, 0, 4, 0], [2, 9, 3, 4, 1, 6, 7, 8, 5], [5, 6, 8, 9, 4, 2, 1, 7, 3], [9, 2, 7, 3, 8, 1, 0, 6, 4], [3, 4, 1, 6, 0, 5, 8, 9, 0]]))
 #print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 1, 9, 2, 0, 3, 4, 5, 7], [1, 8, 4, 5, 3, 7, 9, 2, 6], [7, 5, 6, 8, 2, 9, 0, 4, 0], [2, 9, 3, 4, 1, 6, 7, 8, 5], [5, 6, 8, 9, 4, 2, 1, 7, 3], [9, 2, 7, 3, 8, 1, 5, 6, 4], [3, 4, 1, 6, 0, 5, 8, 9, 0]]))
-print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 1, 9, 2, 6, 3, 4, 5, 7], [1, 8, 4, 5, 3, 7, 9, 2, 6], [7, 5, 6, 8, 2, 9, 3, 4, 0], [2, 9, 3, 4, 1, 6, 7, 8, 5], [5, 6, 8, 9, 4, 2, 1, 7, 3], [9, 2, 7, 3, 8, 1, 5, 6, 4], [3, 4, 1, 6, 7, 5, 8, 9, 0]]))
+#print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 1, 9, 2, 6, 3, 4, 5, 7], [1, 8, 4, 5, 3, 7, 9, 2, 6], [7, 5, 6, 8, 2, 9, 3, 4, 0], [2, 9, 3, 4, 1, 6, 7, 8, 5], [5, 6, 8, 9, 4, 2, 1, 7, 3], [9, 2, 7, 3, 8, 1, 5, 6, 4], [3, 4, 1, 6, 7, 5, 8, 9, 0]]))
+# After 6 iterations, the puzzle is solved for easy_test
 
 # In depth Algorithm:
 # Check each row for a 0
@@ -189,3 +190,51 @@ print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 1, 9
         # obtain the information from the last changed data entry repeat the process
 # Continue until all 0's have been correctly replaced
 # Return the rows 
+
+
+#To speed up this one, we may consider running the original solver to try to reduce the load
+columns = []
+boxes = [[],[],[],[],[],[],[],[],[]]
+possible_numbers = [1,2,3,4,5,6,7,8,9]
+change_list = []
+def better_solver(rows):
+    "Better solver using the newer algorithm"
+    create_columns(rows)
+    create_boxes(rows)
+    b = 0
+    for n in range(9):
+        for m in range(9):
+            if rows[n][m] == 0:
+                b = identify_box(n,m)
+                candidates = []
+                for r in possible_numbers:
+                    if possible_numbers[r] not in rows[n] and possible_numbers[r] not in columns[m] and possible_numbers[r] not in boxes[b]:
+                        candidates.append(possible_numbers[r])
+                        continue
+                    continue
+                if len(candidates) >= 1:
+                    rows[n].pop(m)
+                    rows[n].insert(m,candidates[0])
+                    candidates.pop(0)
+                    change = [n,m,b,candidates]
+                    change_list.insert(0, change)
+                    columns.clear()
+                    boxes.clear()
+                    create_boxes(rows)
+                    create_columns(rows)
+                    candidates.clear()
+                elif len(candidates) == 0:
+                    change = change_list[0]
+                    if len(change[3]) == 0:
+                        n = change[0]
+                        m = change[1]
+                        b = change[2]
+                        rows[n].pop(m)
+                        rows[n].insert(m,0)
+                        change_list.pop(0)
+                        # Here we need to make it do this again, but with the next entry.
+                        # We also need to consider the case where it's not messy, which is easy
+                        # We could try while len(change[3]) == 0 
+                    
+
+

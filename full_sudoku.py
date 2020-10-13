@@ -138,7 +138,7 @@ def solver(rows):
                     rows[n].insert(m,candidates[0])
                     candidates.clear()
                     run = True
-                    print("Found one")
+                    #print("Found one")
                     break
                 else:
                     candidates.clear()
@@ -170,6 +170,16 @@ def solver(rows):
 #print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 1, 9, 2, 0, 3, 4, 5, 7], [1, 8, 4, 5, 3, 7, 9, 2, 6], [7, 5, 6, 8, 2, 9, 0, 4, 0], [2, 9, 3, 4, 1, 6, 7, 8, 5], [5, 6, 8, 9, 4, 2, 1, 7, 3], [9, 2, 7, 3, 8, 1, 5, 6, 4], [3, 4, 1, 6, 0, 5, 8, 9, 0]]))
 #print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 1, 9, 2, 6, 3, 4, 5, 7], [1, 8, 4, 5, 3, 7, 9, 2, 6], [7, 5, 6, 8, 2, 9, 3, 4, 0], [2, 9, 3, 4, 1, 6, 7, 8, 5], [5, 6, 8, 9, 4, 2, 1, 7, 3], [9, 2, 7, 3, 8, 1, 5, 6, 4], [3, 4, 1, 6, 7, 5, 8, 9, 0]]))
 # After 6 iterations, the puzzle is solved for easy_test
+
+
+def solver_manager(rows):
+    for x in range(50):
+        solver(rows)
+        continue
+    return rows
+
+
+
 
 # In depth Algorithm:
 # Check each row for a 0
@@ -207,34 +217,24 @@ def better_solver(rows):
             if rows[n][m] == 0:
                 b = identify_box(n,m)
                 candidates = []
-                for r in possible_numbers:
+                for r in range(9):
                     if possible_numbers[r] not in rows[n] and possible_numbers[r] not in columns[m] and possible_numbers[r] not in boxes[b]:
                         candidates.append(possible_numbers[r])
                         continue
                     continue
-                if len(candidates) >= 1:
+                if len(candidates) == 1:
                     rows[n].pop(m)
                     rows[n].insert(m,candidates[0])
+                    single = True
                     candidates.pop(0)
-                    change = [n,m,b,candidates]
-                    change_list.insert(0, change)
-                    columns.clear()
-                    boxes.clear()
-                    create_boxes(rows)
-                    create_columns(rows)
-                    candidates.clear()
-                elif len(candidates) == 0:
-                    change = change_list[0]
-                    if len(change[3]) == 0:
-                        n = change[0]
-                        m = change[1]
-                        b = change[2]
-                        rows[n].pop(m)
-                        rows[n].insert(m,0)
-                        change_list.pop(0)
-                        # Here we need to make it do this again, but with the next entry.
-                        # We also need to consider the case where it's not messy, which is easy
-                        # We could try while len(change[3]) == 0 
-                    
+                    change = [n,m,b,single,candidates.copy()]
+                    change_list.insert(0,change)
+
+                    print(change_list)
+#change_list can have an additional condition: single
+# The single modifier will determine if we need to just undo this one also and go back to the next one. 
+# Not exactly pretty, but it will negate the issue from earlier
+print(better_solver(easy_test))     
+                        
 
 

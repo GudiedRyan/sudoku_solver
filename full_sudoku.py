@@ -214,6 +214,8 @@ def better_solver(rows):
     b = 0
     for n in range(9):
         for m in range(9):
+            create_columns(rows)
+            create_boxes(rows)
             if rows[n][m] == 0:
                 b = identify_box(n,m)
                 candidates = []
@@ -230,11 +232,20 @@ def better_solver(rows):
                     change = [n,m,b,single,candidates.copy()]
                     change_list.insert(0,change)
 
-                    print(change_list)
+                elif len(candidates) > 1:
+                    candidates.pop(0)
+                    single = False
+                    change = [n,m,b,candidates.copy()]
+                    change_list.insert(0,change)
+                else:
+                    continue
+    print(change_list)
+    return rows
+                    
 #change_list can have an additional condition: single
 # The single modifier will determine if we need to just undo this one also and go back to the next one. 
 # Not exactly pretty, but it will negate the issue from earlier
-print(better_solver(easy_test))     
+print(better_solver(test_puzzle_rows))     
                         
 
 

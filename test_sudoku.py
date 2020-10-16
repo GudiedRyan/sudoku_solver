@@ -109,7 +109,14 @@ rows_solution = [[6, 3, 5, 7, 9, 4, 2, 1, 8],
                  [9, 2, 7, 3, 8, 1, 5, 6, 4], 
                  [3, 4, 1, 6, 7, 5, 8, 9, 2]]
 def solver(rows):
-    
+    pass    
 
 def test_solver():
-    assert rows == rows_solution
+    count = 0
+    for n in range(5):
+        print(n)
+        if n == 2 and count < 2:
+            print("GO BACK")
+            n = 1
+            count +=1
+    print("finished")

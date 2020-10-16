@@ -233,12 +233,43 @@ def better_solver(rows):
                     change_list.insert(0,change)
 
                 elif len(candidates) > 1:
+                    rows[n].pop(m)
+                    rows[n].insert(m,candidates[0])
                     candidates.pop(0)
                     single = False
-                    change = [n,m,b,candidates.copy()]
+                    change = [n,m,b,single,candidates.copy()]
                     change_list.insert(0,change)
-                else:
-                    continue
+                elif len(candidates) == 0:
+                    #print(change_list)
+                    #print(rows)
+                    backtrack = []
+                    while change_list[0][3] == True:
+                        backtrack.append(change_list[0])
+                        rows[change_list[0][0]].pop(change_list[0][1])
+                        rows[change_list[0][0]].insert(change_list[0][1],0)
+                        change_list.pop(0)
+                        #print(change_list)
+                        #print(rows)
+                    if change_list[0][3] == False:
+                        n = change_list[0][0]
+                        m = change_list[0][1]
+                        b = change_list[0][2]
+                        candidates = change_list[0][4]
+                        rows[n].pop(m)
+                        rows[n].insert(m,candidates[0])
+                        candidates.pop(0)
+                        if len(candidates) == 0:
+                            single = True
+                        else:
+                            single = False
+                        change_list.pop(0)
+                        change = [n,m,b,single,candidates.copy()]
+                        change_list.insert(0,change)
+                        create_columns(rows)
+                        create_boxes(rows)
+                        # Need to get a way to redo the missed ones that are found in the backtrack array.
+                        continue
+                    
     print(change_list)
     return rows
                     
@@ -247,5 +278,5 @@ def better_solver(rows):
 # Not exactly pretty, but it will negate the issue from earlier
 print(better_solver(test_puzzle_rows))     
                         
-
-
+# Note: Setting n, m, and b will not change the loop position. This is fine. We can work around this.
+# Keep the deletion, but put the coordinates in a new list so that you know to go back and fix it'

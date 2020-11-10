@@ -233,19 +233,109 @@ def better_solver(rows):
                     change_list.insert(0,change)
 
                 elif len(candidates) > 1:
+                    rows[n].pop(m)
+                    rows[n].insert(m,candidates[0])
                     candidates.pop(0)
                     single = False
-                    change = [n,m,b,candidates.copy()]
+                    change = [n,m,b,single,candidates.copy()]
                     change_list.insert(0,change)
-                else:
-                    continue
-    print(change_list)
+                elif len(candidates) == 0:
+                    #print(change_list)
+                    #print(rows)
+                    backtrack = []
+                    while change_list[0][3] == True:
+                        backtrack.append(change_list[0])
+                        rows[change_list[0][0]].pop(change_list[0][1])
+                        rows[change_list[0][0]].insert(change_list[0][1],0)
+                        change_list.pop(0)
+                        #print(change_list)
+                        #print(rows)
+                    if change_list[0][3] == False:
+                        n = change_list[0][0]
+                        m = change_list[0][1]
+                        b = change_list[0][2]
+                        candidates = change_list[0][4]
+                        rows[n].pop(m)
+                        rows[n].insert(m,candidates[0])
+                        candidates.pop(0)
+                        if len(candidates) == 0:
+                            single = True
+                        else:
+                            single = False
+                        change_list.pop(0)
+                        change = [n,m,b,single,candidates.copy()]
+                        change_list.insert(0,change)
+                        create_columns(rows)
+                        create_boxes(rows)
+                        # Need to get a way to redo the missed ones that are found in the backtrack array.
+                        continue
+                    
+    #print(change_list)
     return rows
                     
 #change_list can have an additional condition: single
 # The single modifier will determine if we need to just undo this one also and go back to the next one. 
 # Not exactly pretty, but it will negate the issue from earlier
-print(better_solver(test_puzzle_rows))     
-                        
+#print(better_solver(test_puzzle_rows))     
+
+# Note: Setting n, m, and b will not change the loop position. This is fine. We can work around this.
+# Keep the deletion, but put the coordinates in a new list so that you know to go back and fix it'
+
+# IDEA:
+# Whenever we place a number, return that new one, then call the function again.
+# Similar to before, we will log the change into an array with positional information.
+# When there is a contradiction, return to previous result in stack or queue, (DECIDE WHICH), then use a different number from that stack/queue
 
 
+columns = []
+boxes = [[],[],[],[],[],[],[],[],[]]
+possible_numbers = [1,2,3,4,5,6,7,8,9]
+change_list = []
+back_log = []
+
+def sudoku_solver(rows,n,m):
+    "Takes the rows and the position, identifies the candidates, then puts the candidates into rows, puts the position data and candidates into the change_list, then returns rows"
+    create_boxes(rows)
+    create_columns(rows)
+    b = identify_box(n,m)
+    candidates = []
+    for r in range(9):
+        if possible_numbers[r] not in rows[n] and possible_numbers[r] not in columns[m] and possible_numbers[r] not in boxes[b]:
+            candidates.append(possible_numbers[r])
+            continue
+        continue
+    
+    return candidates
+        
+
+def sudoku_king(rows):
+    "The sudoku solver manager"
+    for n in range(9):
+        for m in range(9):
+            if rows[n][m] == 0:
+                sudoku_solver(rows,n,m)
+                
+                
+
+
+
+
+            
+
+sudoku_king(test_puzzle_rows)
+
+# Full final Algo:
+# 1. Given an input of rows, where rows is a list of lists containing the contents of each row, we will check for blank spots or '0's using the king function.
+# 2. The "king" function uses 2 for loops to check each entry within the sublists
+# 3. Upon identifying a zero, call the solver function, which will call the functions to generate box/column data and create a list of candidates for that position.
+# 4. The candidates list will be a queue, first in will be the first used for the 0.
+# 5. pop the 0 from rows, and insert the first candidate, then pop the first candidate from the list of candidates
+# 5. At this point, the row number, the column number, and the candidates list will all be put into a list, then inserted to the end of the changes_list.
+# 6. At this point, exit the solver function and return the new rows data.
+# 7. The king function will now proceed to the next 0, where it will call the solver function again to find the candidates.
+# 8. If there are no candidates available at that particular point, we have reached a contradiction, which means there was a mistake. From here we take the last element added to the changes_list stack
+# 9. If the candidates list is empty, then we take the row and column position, pop the number at that position and insert 0, then put the row, column coordinates into a list called back_log, then pop data from the changes_list stack
+# 10. If the candidates list is not empty, then we pop the element at the specified row and column position, then insert the next item in the queue, and pop that from the candidates queue. From here, we pop the data from changes_list, and insert the new data with the updated candidates list
+# 11. If the back_log queue is empty, then the king function will return to the point that caused the contradiction and try again
+# 12. If there is a back_log, then the king function will call the sovler at the points listed in the back_log queue, which will act the same as the regular process
+# 13. This will continue until no 0's are left, upon which the king function will return the solved rows.

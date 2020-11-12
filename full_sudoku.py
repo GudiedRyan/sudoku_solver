@@ -304,9 +304,38 @@ def sudoku_solver(rows,n,m):
             candidates.append(possible_numbers[r])
             continue
         continue
-    
+    if len(candidates) == 0:
+        change = [n,m,candidates]
+        change_list.append(change)
+        return candidates
+    rows[n].pop(m)
+    rows[n].insert(m, candidates[0])
+    # candidates.pop(0)
+    # Why am I removing this line? In the case where there is only one option, we will be fed a contradiction via the empty list. This way we don't shorten a list too far
+    change = [n,m,candidates]
+    change_list.append(change)
     return candidates
         
+def sudoku_plumber(rows):
+    "This function serves to cover the backlog loops"
+    changes = change_list[-1]
+    p = changes[0] # Not required to identify n and m, but it makes it easier for me, so deal with it.
+    q = changes[1]
+    if len(changes[2]) == 1:
+        # If there was only one candidate, then clearly we can't just move to the next one, so we're going to have to iterate back one more (At least)
+        rows[p].pop(q)
+        rows[p].insert(q,0)
+        backdata = [p,q]
+        back_log.insert(0,backdata)
+        change_list.pop(-1)
+        print("Mario")
+        sudoku_plumber(rows)
+        # Here we call it again to basically repeat this process as needed
+        return rows
+    else:
+        print("poggers")
+        
+    
 
 def sudoku_king(rows):
     "The sudoku solver manager"
@@ -314,8 +343,26 @@ def sudoku_king(rows):
         for m in range(9):
             if rows[n][m] == 0:
                 sudoku_solver(rows,n,m)
+                if len(change_list[-1][2]) == 0:
+                    # Here is where we check the most recent change to see if we ran into a contraction. It will ignore this check if it works, but it will begin the backtracking process if it failed
+                    rows[n].pop(m)
+                    rows[n].insert(m,0)
+                    backdata = [n,m]
+                    back_log.insert(0,backdata) #Stick the coordinates into the back_log queue
+                    change_list.pop(-1) # Remove the last entry with the empty candidates list
+                    #changes = change_list[-1] #Grab the next entry, important to know
+                    sudoku_plumber(rows)
+                    
+    print(change_list)
+    print(rows)      
+    return rows
                 
-                
+    # Code segment for after we fix a backtrack:
+    # while len(back_log) > 0:
+    #     sudoku_solver(back_log[-1][0],back_log[-1][1])
+    #     back_log.pop(-1)
+    # TO KEEP IN MIND:
+    # If we run into a contradiction, we will have to make sure we run through and fix. Find a way to implement this without rewriting everything
 
 
 
@@ -332,6 +379,7 @@ sudoku_king(test_puzzle_rows)
 # 5. pop the 0 from rows, and insert the first candidate, then pop the first candidate from the list of candidates
 # 5. At this point, the row number, the column number, and the candidates list will all be put into a list, then inserted to the end of the changes_list.
 # 6. At this point, exit the solver function and return the new rows data.
+# 6.5. Once the rows are returned, check the end of the change_list, change_list[-1][2]. If this is EMPTY, we need to backtrack.
 # 7. The king function will now proceed to the next 0, where it will call the solver function again to find the candidates.
 # 8. If there are no candidates available at that particular point, we have reached a contradiction, which means there was a mistake. From here we take the last element added to the changes_list stack
 # 9. If the candidates list is empty, then we take the row and column position, pop the number at that position and insert 0, then put the row, column coordinates into a list called back_log, then pop data from the changes_list stack

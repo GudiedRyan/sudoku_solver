@@ -328,12 +328,17 @@ def sudoku_plumber(rows):
         backdata = [p,q]
         back_log.insert(0,backdata)
         change_list.pop(-1)
-        print("Mario")
         sudoku_plumber(rows)
         # Here we call it again to basically repeat this process as needed
         return rows
     else:
-        print("poggers")
+        changes[2].pop(0)
+        rows[p].pop(q)
+        rows[p].insert(q,changes[2][0])
+        change_list.pop()
+        change = [p,q,changes[2]]
+        change_list.append(change)
+        return rows
         
     
 
@@ -341,6 +346,8 @@ def sudoku_king(rows):
     "The sudoku solver manager"
     for n in range(9):
         for m in range(9):
+            #if len(back_log) > 0:
+
             if rows[n][m] == 0:
                 sudoku_solver(rows,n,m)
                 if len(change_list[-1][2]) == 0:
@@ -363,7 +370,7 @@ def sudoku_king(rows):
     #     back_log.pop(-1)
     # TO KEEP IN MIND:
     # If we run into a contradiction, we will have to make sure we run through and fix. Find a way to implement this without rewriting everything
-
+    # Ideally we can just merge this as part of the sudoku_king function
 
 
 

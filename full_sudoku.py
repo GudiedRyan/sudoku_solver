@@ -310,6 +310,7 @@ def sudoku_solver(rows,n,m):
         return candidates
     rows[n].pop(m)
     rows[n].insert(m, candidates[0])
+    print("Inserted", candidates[0], "at [", n, ",", m, "]")
     # candidates.pop(0)
     # Why am I removing this line? In the case where there is only one option, we will be fed a contradiction via the empty list. This way we don't shorten a list too far
     change = [n,m,candidates]
@@ -318,6 +319,9 @@ def sudoku_solver(rows,n,m):
         
 def sudoku_plumber(rows):
     "This function serves to cover the backlog loops"
+    if len(change_list) == 0:
+        print("Empty")
+        return rows
     changes = change_list[-1]
     p = changes[0] # Not required to identify n and m, but it makes it easier for me, so deal with it.
     q = changes[1]
@@ -328,6 +332,7 @@ def sudoku_plumber(rows):
         backdata = [p,q]
         back_log.insert(0,backdata)
         change_list.pop(-1)
+        print("deleted")
         sudoku_plumber(rows)
         # Here we call it again to basically repeat this process as needed
         return rows
@@ -338,16 +343,36 @@ def sudoku_plumber(rows):
         change_list.pop()
         change = [p,q,changes[2]]
         change_list.append(change)
+        print("Re-Inserted", changes[0], "at [", p, ",", q, "]")
         return rows
         
-    
+def sudoku_flush(rows):
+    "Iterate through the back_log stuff and work via that"
+    if len(back_log) > 0:
+        back = back_log[0]
+        u = back[0]
+        v = back[1]
+        if rows[u][v] != 0:
+            back_log.pop(0) #This takes care of the possibility that we get duplicate points from plumber
+            sudoku_flush(rows)
+        sudoku_solver(rows,u,v) # Call the sudoku solver to do the back_log points
+        if len(change_list[-1][2]) == 0:
+            # If this runs into a contradiction, then we need to fix this
+            rows[u].pop(v)
+            rows[u].insert(v,0)
+            change_list.pop(-1)
+            sudoku_plumber(rows)
+        else:
+            back_log.pop(0)
+            sudoku_flush(rows)
+    else:
+        return rows
+
 
 def sudoku_king(rows):
     "The sudoku solver manager"
     for n in range(9):
         for m in range(9):
-            #if len(back_log) > 0:
-
             if rows[n][m] == 0:
                 sudoku_solver(rows,n,m)
                 if len(change_list[-1][2]) == 0:
@@ -359,8 +384,10 @@ def sudoku_king(rows):
                     change_list.pop(-1) # Remove the last entry with the empty candidates list
                     #changes = change_list[-1] #Grab the next entry, important to know
                     sudoku_plumber(rows)
+                    sudoku_flush(rows)
                     
     print(change_list)
+    print(back_log)
     print(rows)      
     return rows
                 

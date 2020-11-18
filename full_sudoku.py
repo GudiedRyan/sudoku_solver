@@ -117,69 +117,6 @@ def identify_box(n,m):
 
 possible_numbers = [1,2,3,4,5,6,7,8,9]
 
-def solver(rows):
-    "Solves the sudoku puzzle, ideally"
-    candidates = []
-    create_boxes(rows)
-    create_columns(rows)
-    b = 0
-    run = False
-    for n in range(9):
-        for m in range(9):
-            if rows[n][m] == 0:
-                b = identify_box(n,m)
-                for r in range(9):
-                    if possible_numbers[r] not in rows[n] and possible_numbers[r] not in columns[m] and possible_numbers not in boxes[b]:
-                        candidates.append(possible_numbers[r])
-                        continue
-                    continue
-                if len(candidates) == 1:
-                    rows[n].pop(m)
-                    rows[n].insert(m,candidates[0])
-                    candidates.clear()
-                    run = True
-                    #print("Found one")
-                    break
-                else:
-                    candidates.clear()
-                    continue
-                continue
-            continue
-        continue
-    candidates.clear()
-    for y in range(9):
-        if 0 in rows[y] and run == True:
-            columns.clear()
-            for x in range(9):
-                boxes[x].clear()
-                continue
-            solver(rows)
-        else:
-            #print(changes)
-            break
-    columns.clear()
-    for x in range(9):
-        boxes[x].clear()
-        continue
-    return rows
-#print(solver(test_puzzle_rows))
-#print(solver(easy_test))
-#print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 0, 9, 0, 0, 3, 4, 5, 0], [1, 8, 4, 0, 3, 7, 9, 2, 0], [7, 5, 6, 0, 0, 9, 0, 4, 0], [2, 9, 3, 4, 1, 6, 7, 8, 5], [5, 6, 8, 9, 4, 2, 1, 7, 3], [9, 0, 7, 3, 0, 1, 0, 6, 4], [3, 0, 1, 6, 0, 5, 0, 9, 0]]))
-#print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 0, 9, 2, 0, 3, 4, 5, 0], [1, 8, 4, 5, 3, 7, 9, 2, 0], [7, 5, 6, 0, 0, 9, 0, 4, 0], [2, 9, 3, 4, 1, 6, 7, 8, 5], [5, 6, 8, 9, 4, 2, 1, 7, 3], [9, 2, 7, 3, 0, 1, 0, 6, 4], [3, 0, 1, 6, 0, 5, 8, 9, 0]]))
-#print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 1, 9, 2, 0, 3, 4, 5, 0], [1, 8, 4, 5, 3, 7, 9, 2, 6], [7, 5, 6, 8, 0, 9, 0, 4, 0], [2, 9, 3, 4, 1, 6, 7, 8, 5], [5, 6, 8, 9, 4, 2, 1, 7, 3], [9, 2, 7, 3, 8, 1, 0, 6, 4], [3, 4, 1, 6, 0, 5, 8, 9, 0]]))
-#print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 1, 9, 2, 0, 3, 4, 5, 7], [1, 8, 4, 5, 3, 7, 9, 2, 6], [7, 5, 6, 8, 2, 9, 0, 4, 0], [2, 9, 3, 4, 1, 6, 7, 8, 5], [5, 6, 8, 9, 4, 2, 1, 7, 3], [9, 2, 7, 3, 8, 1, 5, 6, 4], [3, 4, 1, 6, 0, 5, 8, 9, 0]]))
-#print(solver([[6, 3, 5, 7, 9, 4, 2, 1, 8], [4, 7, 2, 1, 5, 8, 6, 3, 9], [8, 1, 9, 2, 6, 3, 4, 5, 7], [1, 8, 4, 5, 3, 7, 9, 2, 6], [7, 5, 6, 8, 2, 9, 3, 4, 0], [2, 9, 3, 4, 1, 6, 7, 8, 5], [5, 6, 8, 9, 4, 2, 1, 7, 3], [9, 2, 7, 3, 8, 1, 5, 6, 4], [3, 4, 1, 6, 7, 5, 8, 9, 0]]))
-# After 6 iterations, the puzzle is solved for easy_test
-
-
-def solver_manager(rows):
-    for x in range(50):
-        solver(rows)
-        continue
-    return rows
-
-
-
 
 # In depth Algorithm:
 # Check each row for a 0
@@ -207,72 +144,7 @@ columns = []
 boxes = [[],[],[],[],[],[],[],[],[]]
 possible_numbers = [1,2,3,4,5,6,7,8,9]
 change_list = []
-def better_solver(rows):
-    "Better solver using the newer algorithm"
-    create_columns(rows)
-    create_boxes(rows)
-    b = 0
-    for n in range(9):
-        for m in range(9):
-            create_columns(rows)
-            create_boxes(rows)
-            if rows[n][m] == 0:
-                b = identify_box(n,m)
-                candidates = []
-                for r in range(9):
-                    if possible_numbers[r] not in rows[n] and possible_numbers[r] not in columns[m] and possible_numbers[r] not in boxes[b]:
-                        candidates.append(possible_numbers[r])
-                        continue
-                    continue
-                if len(candidates) == 1:
-                    rows[n].pop(m)
-                    rows[n].insert(m,candidates[0])
-                    single = True
-                    candidates.pop(0)
-                    change = [n,m,b,single,candidates.copy()]
-                    change_list.insert(0,change)
-
-                elif len(candidates) > 1:
-                    rows[n].pop(m)
-                    rows[n].insert(m,candidates[0])
-                    candidates.pop(0)
-                    single = False
-                    change = [n,m,b,single,candidates.copy()]
-                    change_list.insert(0,change)
-                elif len(candidates) == 0:
-                    #print(change_list)
-                    #print(rows)
-                    backtrack = []
-                    while change_list[0][3] == True:
-                        backtrack.append(change_list[0])
-                        rows[change_list[0][0]].pop(change_list[0][1])
-                        rows[change_list[0][0]].insert(change_list[0][1],0)
-                        change_list.pop(0)
-                        #print(change_list)
-                        #print(rows)
-                    if change_list[0][3] == False:
-                        n = change_list[0][0]
-                        m = change_list[0][1]
-                        b = change_list[0][2]
-                        candidates = change_list[0][4]
-                        rows[n].pop(m)
-                        rows[n].insert(m,candidates[0])
-                        candidates.pop(0)
-                        if len(candidates) == 0:
-                            single = True
-                        else:
-                            single = False
-                        change_list.pop(0)
-                        change = [n,m,b,single,candidates.copy()]
-                        change_list.insert(0,change)
-                        create_columns(rows)
-                        create_boxes(rows)
-                        # Need to get a way to redo the missed ones that are found in the backtrack array.
-                        continue
-                    
-    #print(change_list)
-    return rows
-                    
+                 
 #change_list can have an additional condition: single
 # The single modifier will determine if we need to just undo this one also and go back to the next one. 
 # Not exactly pretty, but it will negate the issue from earlier
@@ -318,8 +190,10 @@ def sudoku_solver(rows,n,m):
     return candidates
         
 def sudoku_plumber(rows):
-    "This function serves to cover the backlog loops"
+    "This goes back to the problematic position and inserts the next candidate"
     if len(change_list) == 0:
+        # If somehow the list is empty and this function is called, then we need to exit before the program runs into an error.
+        # In fact, this really shouldn't even be necessary. Need to rethink this.
         print("Empty")
         return rows
     changes = change_list[-1]
@@ -329,8 +203,8 @@ def sudoku_plumber(rows):
         # If there was only one candidate, then clearly we can't just move to the next one, so we're going to have to iterate back one more (At least)
         rows[p].pop(q)
         rows[p].insert(q,0)
-        backdata = [p,q]
-        back_log.insert(0,backdata)
+        # backdata = [p,q]
+        # back_log.insert(0,backdata)
         change_list.pop(-1)
         print("deleted")
         sudoku_plumber(rows)
@@ -371,23 +245,33 @@ def sudoku_flush(rows):
 
 def sudoku_king(rows):
     "The sudoku solver manager"
-    for n in range(9):
-        for m in range(9):
+    #for n in range(9):
+    n = 0
+    while n < 9:
+        m = 0
+        while m < 9: 
+        #for m in range(9):
             if rows[n][m] == 0:
                 sudoku_solver(rows,n,m)
                 if len(change_list[-1][2]) == 0:
                     # Here is where we check the most recent change to see if we ran into a contraction. It will ignore this check if it works, but it will begin the backtracking process if it failed
-                    rows[n].pop(m)
+                    rows[n].pop(m) # This might be jumping the gun here. By having this outside of the plumber function, we limit ourselves to this routine. Perhaps this needs to be integrated into the plumber function.
                     rows[n].insert(m,0)
-                    backdata = [n,m]
-                    back_log.insert(0,backdata) #Stick the coordinates into the back_log queue
+                    # backdata = [n,m]
+                    # back_log.insert(0,backdata) #Stick the coordinates into the back_log queue
                     change_list.pop(-1) # Remove the last entry with the empty candidates list
                     #changes = change_list[-1] #Grab the next entry, important to know
                     sudoku_plumber(rows)
-                    sudoku_flush(rows)
+                    # sudoku_flush(rows)
+                    if len(change_list) != 0:
+                        n = change_list[-1][0]
+                        m = change_list[-1][1]
+            m += 1
+        n += 1
+                
                     
     print(change_list)
-    print(back_log)
+    # print(back_log)
     print(rows)      
     return rows
                 
@@ -398,8 +282,6 @@ def sudoku_king(rows):
     # TO KEEP IN MIND:
     # If we run into a contradiction, we will have to make sure we run through and fix. Find a way to implement this without rewriting everything
     # Ideally we can just merge this as part of the sudoku_king function
-
-
 
             
 
@@ -421,3 +303,9 @@ sudoku_king(test_puzzle_rows)
 # 11. If the back_log queue is empty, then the king function will return to the point that caused the contradiction and try again
 # 12. If there is a back_log, then the king function will call the sovler at the points listed in the back_log queue, which will act the same as the regular process
 # 13. This will continue until no 0's are left, upon which the king function will return the solved rows.
+
+# Ammendments:
+# Keep the change_list/plumber tools.
+# Switch for loops to while loops and after running plumber, rather than creating a back_log, just iterate after the change was made.
+# Basically if rows[4][1] has no candidates, go back to the previous entry. If there's another candidate, switch to that.
+# This WILL NOT change the functionality of the change_list stack, it will simply nullify the back_log rubbish.

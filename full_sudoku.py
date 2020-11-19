@@ -179,7 +179,7 @@ def sudoku_solver(rows,n,m):
     if len(candidates) == 0:
         change = [n,m,candidates]
         change_list.append(change)
-        return candidates
+        return rows
     rows[n].pop(m)
     rows[n].insert(m, candidates[0])
     print("Inserted", candidates[0], "at [", n, ",", m, "]")
@@ -187,19 +187,26 @@ def sudoku_solver(rows,n,m):
     # Why am I removing this line? In the case where there is only one option, we will be fed a contradiction via the empty list. This way we don't shorten a list too far
     change = [n,m,candidates]
     change_list.append(change)
-    return candidates
+    return rows
         
-def sudoku_plumber(rows):
+def sudoku_plumber(rows, fixed):
     "This goes back to the problematic position and inserts the next candidate"
-    if len(change_list) == 0:
+    #if len(change_list) == 0:
         # If somehow the list is empty and this function is called, then we need to exit before the program runs into an error.
         # In fact, this really shouldn't even be necessary. Need to rethink this.
-        print("Empty")
+        #print("Empty")
+        #return rows
+    if fixed == True:
         return rows
     changes = change_list[-1]
     p = changes[0] # Not required to identify n and m, but it makes it easier for me, so deal with it.
     q = changes[1]
-    if len(changes[2]) == 1:
+    if len(changes[2]) == 0:
+        # This means there were no viable candidates, therefore we could not have inserted anything into rows
+        change_list.pop(-1)
+        sudoku_plumber(rows, fixed)
+        return rows
+    elif len(changes[2]) == 1 and fixed == False:
         # If there was only one candidate, then clearly we can't just move to the next one, so we're going to have to iterate back one more (At least)
         rows[p].pop(q)
         rows[p].insert(q,0)
@@ -207,7 +214,7 @@ def sudoku_plumber(rows):
         # back_log.insert(0,backdata)
         change_list.pop(-1)
         print("deleted")
-        sudoku_plumber(rows)
+        sudoku_plumber(rows, fixed)
         # Here we call it again to basically repeat this process as needed
         return rows
     else:
@@ -218,6 +225,7 @@ def sudoku_plumber(rows):
         change = [p,q,changes[2]]
         change_list.append(change)
         print("Re-Inserted", changes[0], "at [", p, ",", q, "]")
+        fixed = True
         return rows
         
 def sudoku_flush(rows):
@@ -255,23 +263,25 @@ def sudoku_king(rows):
                 sudoku_solver(rows,n,m)
                 if len(change_list[-1][2]) == 0:
                     # Here is where we check the most recent change to see if we ran into a contraction. It will ignore this check if it works, but it will begin the backtracking process if it failed
-                    rows[n].pop(m) # This might be jumping the gun here. By having this outside of the plumber function, we limit ourselves to this routine. Perhaps this needs to be integrated into the plumber function.
-                    rows[n].insert(m,0)
+                    # rows[n].pop(m) # This might be jumping the gun here. By having this outside of the plumber function, we limit ourselves to this routine. Perhaps this needs to be integrated into the plumber function.
+                    # rows[n].insert(m,0)
                     # backdata = [n,m]
                     # back_log.insert(0,backdata) #Stick the coordinates into the back_log queue
-                    change_list.pop(-1) # Remove the last entry with the empty candidates list
+                    # change_list.pop(-1) # Remove the last entry with the empty candidates list
                     #changes = change_list[-1] #Grab the next entry, important to know
-                    sudoku_plumber(rows)
+                    fixed = False
+                    sudoku_plumber(rows, fixed)
                     # sudoku_flush(rows)
                     if len(change_list) != 0:
                         n = change_list[-1][0]
                         m = change_list[-1][1]
+                    continue
             m += 1
         n += 1
                 
                     
     print(change_list)
-    # print(back_log)
+    #print(back_log)
     print(rows)      
     return rows
                 

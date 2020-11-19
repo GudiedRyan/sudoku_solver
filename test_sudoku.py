@@ -111,7 +111,7 @@ rows_solution = [[6, 3, 5, 7, 9, 4, 2, 1, 8],
 def solver(rows):
     pass    
 
-def test_solver():
+#def test_solver():
     count = 0
     for n in range(5):
         print(n)
@@ -120,3 +120,15 @@ def test_solver():
             n = 1
             count +=1
     print("finished")
+
+def test_indices():
+    finished = False
+    i = 0
+    while i < 10:
+        print(i)
+        if i == 5 and finished == False:
+            i = 2
+            finished = True
+            continue
+        i += 1
+test_indices()

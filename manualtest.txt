@@ -1,0 +1,49 @@
+puzzle = [[5,0,0,0,0,0,8,0,9],
+          [0,0,0,6,8,9,0,0,0],
+          [8,9,0,0,2,0,0,3,0],
+          [0,0,0,9,0,6,0,7,0],
+          [4,0,5,0,7,0,3,0,1],
+          [0,7,0,5,0,1,0,0,0],
+          [0,5,0,0,9,0,0,4,6],
+          [0,0,0,2,5,8,0,0,0],
+          [1,0,2,0,0,0,0,0,5]]
+rows[0][0] != 0
+rows[0][1] == 0:
+    candidates = [1,2,3,4,6]
+    insert 1
+    change_log = [[0,1,[1,2,3,4,6]]]
+    len(change_log[-1][2]) != 0
+    continue
+rows[0][2]
+    candidates = [3,4,6,7]
+    insert 3
+    change_log = [[0,1,[1,2,3,4,6]],[0,2,[3,4,6,7]]]
+    len(change_log[-1][2]) != 0
+    continue
+rows[0][3]
+    candidates = [4,7]
+    insert 4
+    change_log = [[0,1,[1,2,3,4,6]],[0,2,[3,4,6,7]],[0,3,[4,7]]]
+    len(change_log[-1][2]) != 0
+    continue
+rows[0][4]
+    candidates = []
+    change_log = [[0,1,[1,2,3,4,6]],[0,2,[3,4,6,7]],[0,3,[4,7]],[0,4,[]]]
+    len(change_log[-1][2]) == 0
+    plumber:
+        change_log[-1] == [0,4,[]]
+        len(change_log[-1][2]) ==  0
+        change_log.pop()
+        plumber:
+            change_log = [[0,1,[1,2,3,4,6]],[0,2,[3,4,6,7]],[0,3,[4,7]]]
+            change_log[-1] = [0,3,[4,7]]
+            remove 4 from rows[0][3]
+            change_log[-1][2].pop(0)
+            insert 7
+            change_log.pop(-1)
+            change_log = [[0,1,[1,2,3,4,6]],[0,2,[3,4,6,7]],[0,3,[7]]]
+    candidates
+rows[0][5]
+rows[0][1]
+rows[0][1]
+rows[0][1]

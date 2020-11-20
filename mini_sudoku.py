@@ -47,6 +47,16 @@ def which_box(n,m):
     else:
         return 3
 
+def clear_boxes(boxes):
+    "Clears the box data"
+    for x in range(4):
+        boxes[x].clear()
+        continue
+    # print(boxes)
+    return boxes
+
+# clear_boxes([[0,0,1,0],[0,2,0,0],[4,0,0,0],[0,0,0,3]])
+
 possible_numbers = [1,2,3,4]
 change_list = []
 
@@ -62,22 +72,26 @@ def sudoku_solver(rows,n,m):
         if a not in rows[n] and a not in columns[m] and a not in boxes[b]:
             candidates.append(a)
             continue
+        #else:
+            #print(a, "is in", rows[n], ",", columns[m], "or", boxes[b])
         continue
     if len(candidates) == 0:
-        print("Contradiction at [",n,",",m,"]")
+        # print("Contradiction at [",n,",",m,"]")
         change = [n,m,candidates]
         change_list.append(change)
+        clear_boxes(boxes)
         return rows
     rows[n].pop(m)
     rows[n].insert(m,candidates[0])
-    print("Inserted", candidates[0], "at [", n, ",", m, "]")
+    #print("Inserted", candidates[0], "at [", n, ",", m, "]")
     change = [n,m,candidates]
     change_list.append(change)
+    clear_boxes(boxes)
     return rows
 
 def sudoku_mechanic(rows):
     "Undoes changes until a new candidate can be entered"
-    print(change_list)
+    #print(change_list)
     change = change_list[-1]
     p = change[0]
     q = change[1]
@@ -96,7 +110,7 @@ def sudoku_mechanic(rows):
         rows[p].pop(q)
         cand.pop(0)
         rows[p].insert(q,cand[0])
-        print("Re-inserted, ",cand[0],"at [",p,",",q,"]")
+        #print("Re-inserted, ",cand[0],"at [",p,",",q,"]")
         change_list.pop()
         change = [p,q,cand]
         change_list.append(change)
@@ -112,7 +126,7 @@ def sudoku_prince(rows):
                 sudoku_solver(rows,n,m)
                 if len(change_list[-1][2]) == 0:
                     sudoku_mechanic(rows)
-                    m -= 1
+                    m = change_list[-1][1]
             m += 1
         n += 1
     print(change_list)
@@ -122,5 +136,7 @@ def sudoku_prince(rows):
 sudoku_prince(rows)
 # Here it breaks at rows[1][1]
 
-sudoku_prince([[1, 2, 3, 4], [4, 0, 2, 1], [2, 1, 4, 3], [3, 4, 1, 2]])
+sudoku_prince([[0,0,1,0],[0,2,0,0],[4,0,0,0],[0,0,0,3]])
+
+#sudoku_prince([[1, 2, 3, 4], [4, 0, 2, 1], [2, 1, 4, 3], [3, 4, 1, 2]])
 # Here it works

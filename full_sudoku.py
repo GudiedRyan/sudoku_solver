@@ -18,16 +18,15 @@ test_solution = [[5,3,4,6,7,8,9,1,2],
                  [2,8,7,4,1,9,6,3,5],
                  [3,4,5,2,8,6,1,7,9]]
 
-
-test_2 = [[0,0,3,0,4,2,0,9,0],
-          [0,9,0,0,6,0,5,0,0],
-          [5,0,0,0,0,0,0,1,0],
-          [0,0,1,7,0,0,2,8,5],
-          [0,0,8,0,0,0,1,0,1],
-          [3,2,9,0,0,8,7,0,6],
-          [0,3,0,0,0,0,0,0,1],
-          [0,0,5,0,9,0,0,2,0],
-          [0,8,0,2,1,0,6,0,0]]
+test_2 = [[0,0,8,0,0,0,4,0,6],
+          [0,0,7,0,0,8,0,0,0],
+          [0,0,0,9,0,1,8,0,0],
+          [2,0,1,0,9,0,3,7,0],
+          [0,0,9,2,0,4,6,0,0],
+          [0,3,5,0,1,0,2,0,9],
+          [0,0,6,1,0,9,0,0,0],
+          [0,0,0,4,0,0,7,0,0],
+          [5,0,2,0,0,0,1,0,0]]
 
 easy_test = [[0,3,0,0,9,0,0,0,8],
              [4,0,0,1,5,0,6,0,9],
@@ -165,6 +164,13 @@ possible_numbers = [1,2,3,4,5,6,7,8,9]
 change_list = []
 back_log = []
 
+def box_cleaner(boxes):
+    "Cleans out the box data to prevent false data from staying"
+    for t in range(9):
+        boxes[t].clear()
+        continue
+    return boxes
+
 def sudoku_solver(rows,n,m):
     "Takes the rows and the position, identifies the candidates, then puts the candidates into rows, puts the position data and candidates into the change_list, then returns rows"
     create_boxes(rows)
@@ -179,14 +185,16 @@ def sudoku_solver(rows,n,m):
     if len(candidates) == 0:
         change = [n,m,candidates]
         change_list.append(change)
+        box_cleaner(boxes)
         return rows
     rows[n].pop(m)
     rows[n].insert(m, candidates[0])
-    print("Inserted", candidates[0], "at [", n, ",", m, "]")
+    # print("Inserted", candidates[0], "at [", n, ",", m, "]")
     # candidates.pop(0)
     # Why am I removing this line? In the case where there is only one option, we will be fed a contradiction via the empty list. This way we don't shorten a list too far
     change = [n,m,candidates]
     change_list.append(change)
+    box_cleaner(boxes)
     return rows
         
 def sudoku_plumber(rows, fixed):
@@ -210,10 +218,8 @@ def sudoku_plumber(rows, fixed):
         # If there was only one candidate, then clearly we can't just move to the next one, so we're going to have to iterate back one more (At least)
         rows[p].pop(q)
         rows[p].insert(q,0)
-        # backdata = [p,q]
-        # back_log.insert(0,backdata)
         change_list.pop(-1)
-        print("deleted")
+        #print("deleted")
         sudoku_plumber(rows, fixed)
         # Here we call it again to basically repeat this process as needed
         return rows
@@ -224,30 +230,8 @@ def sudoku_plumber(rows, fixed):
         change_list.pop()
         change = [p,q,changes[2]]
         change_list.append(change)
-        print("Re-Inserted", changes[0], "at [", p, ",", q, "]")
+        #print("Re-Inserted", changes[0], "at [", p, ",", q, "]")
         fixed = True
-        return rows
-        
-def sudoku_flush(rows):
-    "Iterate through the back_log stuff and work via that"
-    if len(back_log) > 0:
-        back = back_log[0]
-        u = back[0]
-        v = back[1]
-        if rows[u][v] != 0:
-            back_log.pop(0) #This takes care of the possibility that we get duplicate points from plumber
-            sudoku_flush(rows)
-        sudoku_solver(rows,u,v) # Call the sudoku solver to do the back_log points
-        if len(change_list[-1][2]) == 0:
-            # If this runs into a contradiction, then we need to fix this
-            rows[u].pop(v)
-            rows[u].insert(v,0)
-            change_list.pop(-1)
-            sudoku_plumber(rows)
-        else:
-            back_log.pop(0)
-            sudoku_flush(rows)
-    else:
         return rows
 
 
@@ -263,25 +247,16 @@ def sudoku_king(rows):
                 sudoku_solver(rows,n,m)
                 if len(change_list[-1][2]) == 0:
                     # Here is where we check the most recent change to see if we ran into a contraction. It will ignore this check if it works, but it will begin the backtracking process if it failed
-                    # rows[n].pop(m) # This might be jumping the gun here. By having this outside of the plumber function, we limit ourselves to this routine. Perhaps this needs to be integrated into the plumber function.
-                    # rows[n].insert(m,0)
-                    # backdata = [n,m]
-                    # back_log.insert(0,backdata) #Stick the coordinates into the back_log queue
-                    # change_list.pop(-1) # Remove the last entry with the empty candidates list
-                    #changes = change_list[-1] #Grab the next entry, important to know
                     fixed = False
                     sudoku_plumber(rows, fixed)
-                    # sudoku_flush(rows)
                     if len(change_list) != 0:
                         n = change_list[-1][0]
                         m = change_list[-1][1]
                     continue
             m += 1
         n += 1
-                
-                    
+                               
     print(change_list)
-    #print(back_log)
     print(rows)      
     return rows
                 
@@ -296,6 +271,8 @@ def sudoku_king(rows):
             
 
 sudoku_king(test_puzzle_rows)
+sudoku_king(easy_test)
+sudoku_king(test_2)
 
 # Full final Algo:
 # 1. Given an input of rows, where rows is a list of lists containing the contents of each row, we will check for blank spots or '0's using the king function.

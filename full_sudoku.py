@@ -38,9 +38,25 @@ easy_test = [[0,3,0,0,9,0,0,0,8],
              [0,0,7,3,0,0,0,6,4],
              [3,0,1,6,0,5,0,0,0]]
 
-#Important idea: Rather than have a set number of loops, have it check changes
-#Each time it changes, increase change count.
-#If change count doesnt increase, end
+easy_test = [[8,0,0,0,0,0,0,0,0],
+             [0,0,3,6,0,0,0,0,0],
+             [0,7,0,0,9,0,2,0,0],
+             [0,5,0,0,0,7,0,0,0],
+             [0,0,0,0,4,5,7,0,0],
+             [0,0,0,1,0,0,0,3,0],
+             [0,0,1,0,0,0,0,6,8],
+             [0,0,8,5,0,0,0,1,0],
+             [0,9,0,0,0,0,4,0,0]]
+
+blanktest = [[0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0]]
 
 columns = []
 boxes = [[],[],[],[],[],[],[],[],[]]
@@ -112,50 +128,6 @@ def identify_box(n,m):
             return 7
         elif m in range(6,9):
             return 8
-
-
-possible_numbers = [1,2,3,4,5,6,7,8,9]
-
-
-# In depth Algorithm:
-# Check each row for a 0
-# If there are no 0's, return the rows
-# Generate the column and box data
-# At the first zero, check the corresponding row, column, and box to see which numbers are candidates
-# If there is only one candidate, remove the 0 and put that candidate in, 
-    # then remake the column and box data, clear the candidates and continue to the next 0
-# If there there are at least 2 candidates, input the first candidate, and save a copy of the candidates list with the used number removed.
-    # Store the row, column, box, and copied list in an array called changes
-    # Remake the column and box data, and clear the candidates list
-    # Continue to the next 0
-# If there are NO candidates, grab the last piece of information from the changes list
-    # This will be the last edited number, so go back to that position and remove the number
-    # Replace it with the first number from the copied candidates list, then pop that number from the copied candidates list
-    # Remake column and box data, then proceed from the position that was most recently changed
-        # IF the copied candidates list is EMPTY, remove the entire data entry from the changes list
-        # obtain the information from the last changed data entry repeat the process
-# Continue until all 0's have been correctly replaced
-# Return the rows 
-
-
-#To speed up this one, we may consider running the original solver to try to reduce the load
-columns = []
-boxes = [[],[],[],[],[],[],[],[],[]]
-possible_numbers = [1,2,3,4,5,6,7,8,9]
-change_list = []
-                 
-#change_list can have an additional condition: single
-# The single modifier will determine if we need to just undo this one also and go back to the next one. 
-# Not exactly pretty, but it will negate the issue from earlier
-#print(better_solver(test_puzzle_rows))     
-
-# Note: Setting n, m, and b will not change the loop position. This is fine. We can work around this.
-# Keep the deletion, but put the coordinates in a new list so that you know to go back and fix it'
-
-# IDEA:
-# Whenever we place a number, return that new one, then call the function again.
-# Similar to before, we will log the change into an array with positional information.
-# When there is a contradiction, return to previous result in stack or queue, (DECIDE WHICH), then use a different number from that stack/queue
 
 
 columns = []
@@ -256,43 +228,17 @@ def sudoku_king(rows):
             m += 1
         n += 1
                                
-    print(change_list)
+    #print(change_list)
     print(rows)      
     return rows
                 
-    # Code segment for after we fix a backtrack:
-    # while len(back_log) > 0:
-    #     sudoku_solver(back_log[-1][0],back_log[-1][1])
-    #     back_log.pop(-1)
-    # TO KEEP IN MIND:
-    # If we run into a contradiction, we will have to make sure we run through and fix. Find a way to implement this without rewriting everything
-    # Ideally we can just merge this as part of the sudoku_king function
 
-            
+#sudoku_king(test_puzzle_rows)
+#sudoku_king(easy_test)
+#sudoku_king(test_2)
+#sudoku_king(blanktest)
 
-sudoku_king(test_puzzle_rows)
-sudoku_king(easy_test)
-sudoku_king(test_2)
-
-# Full final Algo:
-# 1. Given an input of rows, where rows is a list of lists containing the contents of each row, we will check for blank spots or '0's using the king function.
-# 2. The "king" function uses 2 for loops to check each entry within the sublists
-# 3. Upon identifying a zero, call the solver function, which will call the functions to generate box/column data and create a list of candidates for that position.
-# 4. The candidates list will be a queue, first in will be the first used for the 0.
-# 5. pop the 0 from rows, and insert the first candidate, then pop the first candidate from the list of candidates
-# 5. At this point, the row number, the column number, and the candidates list will all be put into a list, then inserted to the end of the changes_list.
-# 6. At this point, exit the solver function and return the new rows data.
-# 6.5. Once the rows are returned, check the end of the change_list, change_list[-1][2]. If this is EMPTY, we need to backtrack.
-# 7. The king function will now proceed to the next 0, where it will call the solver function again to find the candidates.
-# 8. If there are no candidates available at that particular point, we have reached a contradiction, which means there was a mistake. From here we take the last element added to the changes_list stack
-# 9. If the candidates list is empty, then we take the row and column position, pop the number at that position and insert 0, then put the row, column coordinates into a list called back_log, then pop data from the changes_list stack
-# 10. If the candidates list is not empty, then we pop the element at the specified row and column position, then insert the next item in the queue, and pop that from the candidates queue. From here, we pop the data from changes_list, and insert the new data with the updated candidates list
-# 11. If the back_log queue is empty, then the king function will return to the point that caused the contradiction and try again
-# 12. If there is a back_log, then the king function will call the sovler at the points listed in the back_log queue, which will act the same as the regular process
-# 13. This will continue until no 0's are left, upon which the king function will return the solved rows.
-
-# Ammendments:
-# Keep the change_list/plumber tools.
-# Switch for loops to while loops and after running plumber, rather than creating a back_log, just iterate after the change was made.
-# Basically if rows[4][1] has no candidates, go back to the previous entry. If there's another candidate, switch to that.
-# This WILL NOT change the functionality of the change_list stack, it will simply nullify the back_log rubbish.
+######################### FUNCTION TWO ###########################
+# This will be the staging area for the additonal features. This first one will simply return a hint.
+# When this one is called, a copy of rows will be saved to know which are the original points and which are new, so it can select
+# a hint accordingly.

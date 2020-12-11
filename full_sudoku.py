@@ -242,3 +242,10 @@ def sudoku_king(rows):
 # This will be the staging area for the additonal features. This first one will simply return a hint.
 # When this one is called, a copy of rows will be saved to know which are the original points and which are new, so it can select
 # a hint accordingly.
+
+# Algorithm:
+# 1. Create a copy of the rows
+# 2. Call sudoku_king (the solver) on the copy.
+# 3. Parse through the original rows, at the first 0, take the index
+# 4. Use this index to get the solved answer, and stick this in
+# 5. Return the rows with the hint added in

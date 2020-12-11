@@ -1,3 +1,5 @@
+import copy
+
 test_puzzle_rows = [[5,3,0,0,7,0,0,0,0],
                     [6,0,0,1,9,5,0,0,0],
                     [0,9,8,0,0,0,0,6,0],
@@ -249,3 +251,22 @@ def sudoku_king(rows):
 # 3. Parse through the original rows, at the first 0, take the index
 # 4. Use this index to get the solved answer, and stick this in
 # 5. Return the rows with the hint added in
+
+def sudoku_hint(rows):
+    "Calls the solver and returns the puzzle with a hint"
+    rows_copy = copy.deepcopy(rows)
+    sudoku_king(rows)
+    hint = 0
+    while hint < 1:
+        for n in range(9):
+            for m in range(9):
+                if rows_copy[n][m] == 0:
+                    rows_copy[n].pop(m)
+                    rows_copy[n].insert(m,rows[n][m])
+                    hint += 1
+                    break
+                continue
+            continue
+    print(rows_copy)
+    return rows_copy
+sudoku_hint(test_puzzle_rows)

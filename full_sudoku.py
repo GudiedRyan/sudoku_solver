@@ -269,4 +269,5 @@ def sudoku_hint(rows):
             continue
     print(rows_copy)
     return rows_copy
+
 sudoku_hint(test_puzzle_rows)

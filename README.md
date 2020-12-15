@@ -31,4 +31,12 @@ When you call sudoku_king(rows), the following steps will take place:
 13. If there is a back_log, then the king function will call the sovler at the points listed in the back_log queue, which will act the same as the regular process
 14. This will continue until no 0's are left, upon which the king function will return the solved rows.
 
-Important to note: The files currently have a lot of comments in them explaining ideas or just brainstorming ideas. I will go back and clean that up in due time. This will be converted to an API and used in my flask-sudoku repository.
+# Hint Provider:
+The solver has a secondary function, sudoku_hint, that will solve the puzzle behind the scenes then provide a hint to the user.
+
+When called, here's what happens:
+1. Create a copy of the rows and set a hint counter to 0.
+2. Call sudoku_king (the solver) on the original.
+3. Parse through the copy_rows, at the first 0, take the index
+4. Use this index to get the solved answer, and insert it into the copy, and increase the hint counter to 1 so that the loop stops.
+5. Return the copied rows with the hint included.

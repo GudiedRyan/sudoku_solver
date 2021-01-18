@@ -235,10 +235,10 @@ def sudoku_king(rows):
     return rows
                 
 
-#sudoku_king(test_puzzle_rows)
-#sudoku_king(easy_test)
-#sudoku_king(test_2)
-#sudoku_king(blanktest)
+# sudoku_king(test_puzzle_rows)
+# sudoku_king(easy_test)
+# sudoku_king(test_2)
+# sudoku_king(blanktest)
 
 ######################### FUNCTION TWO ###########################
 # This will be the staging area for the additonal features. This first one will simply return a hint.
@@ -270,4 +270,5 @@ def sudoku_hint(rows):
     print(rows_copy)
     return rows_copy
 
-sudoku_hint(test_puzzle_rows)
+#sudoku_hint(test_puzzle_rows)
+

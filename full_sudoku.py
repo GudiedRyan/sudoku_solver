@@ -264,7 +264,7 @@ def sudoku_hint(rows):
                     rows_copy[n].pop(m)
                     rows_copy[n].insert(m,rows[n][m])
                     hint += 1
-                    break
+                    return rows_copy
                 continue
             continue
     print(rows_copy)

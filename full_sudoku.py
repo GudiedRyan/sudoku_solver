@@ -256,17 +256,14 @@ def sudoku_hint(rows):
     "Calls the solver and returns the puzzle with a hint"
     rows_copy = copy.deepcopy(rows)
     sudoku_king(rows)
-    hint = 0
-    while hint < 1:
-        for n in range(9):
-            for m in range(9):
-                if rows_copy[n][m] == 0:
-                    rows_copy[n].pop(m)
-                    rows_copy[n].insert(m,rows[n][m])
-                    hint += 1
-                    return rows_copy
-                continue
+    for n in range(9):
+        for m in range(9):
+            if rows_copy[n][m] == 0:
+                rows_copy[n].pop(m)
+                rows_copy[n].insert(m,rows[n][m])
+                return rows_copy
             continue
+        continue
     print(rows_copy)
     return rows_copy
 

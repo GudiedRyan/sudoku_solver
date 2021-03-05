@@ -234,6 +234,32 @@ def sudoku_king(rows):
     print(rows)      
     return rows
                 
+fail_puzzle_rows = [[5,3,6,0,7,0,0,0,0],
+                    [6,0,0,1,9,5,0,0,0],
+                    [0,9,8,0,0,0,0,6,0],
+                    [8,0,0,0,6,0,0,0,3],
+                    [4,0,0,8,0,3,0,0,1],
+                    [7,0,0,0,2,0,0,0,6],
+                    [0,6,0,0,0,0,2,8,0],
+                    [0,0,0,4,1,9,0,0,5],
+                    [0,0,0,0,8,0,0,7,9]]
+sudoku_king(fail_puzzle_rows)
+
+############################ PREVENTING INFINITE RUNTIME ################################
+# There will be a global variable, kill_switch set by default to false.
+# What makes a puzzle unsolvable?
+#### In terms of the program, we reach an unsolvable issue when we've tried every possible combination.
+
+# Problematic Puzzle checker
+#### Run checks that no rows, columns, or boxes have two of the same number in them. If they do, immediately activate kill_switch
+#### This will increase runtime sadly, but not so much so that it becomes unreasonable. This will NOT capture every fail, but it will
+#### stop obvious failures before they can begin. Actually it might solve them all.
+def sudoku_filter(rows):
+    "Prevents us from wasting time on rubbish by identifying mistakes in puzzle"
+    # Check rows for dupes
+    # Check columns for dupes
+    # Check boxes for dupes
+    pass
 
 # sudoku_king(test_puzzle_rows)
 # sudoku_king(easy_test)

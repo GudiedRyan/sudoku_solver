@@ -243,7 +243,7 @@ fail_puzzle_rows = [[5,3,6,0,7,0,0,0,0],
                     [0,6,0,0,0,0,2,8,0],
                     [0,0,0,4,1,9,0,0,5],
                     [0,0,0,0,8,0,0,7,9]]
-sudoku_king(fail_puzzle_rows)
+#sudoku_king(fail_puzzle_rows)
 
 ############################ PREVENTING INFINITE RUNTIME ################################
 # There will be a global variable, kill_switch set by default to false.
@@ -257,9 +257,20 @@ sudoku_king(fail_puzzle_rows)
 def sudoku_filter(rows):
     "Prevents us from wasting time on rubbish by identifying mistakes in puzzle"
     # Check rows for dupes
+    for n in range(len(rows)):
+        no_zeroes = []
+        for m in range(9):
+            if rows[n][m] != 0:
+                no_zeroes.append(rows[n][m])
+                continue
+            continue
+        if len(no_zeroes) != len(set(no_zeroes)):
+            # Activate kill switch
+            return False
+        continue
     # Check columns for dupes
     # Check boxes for dupes
-    pass
+    return True
 
 # sudoku_king(test_puzzle_rows)
 # sudoku_king(easy_test)

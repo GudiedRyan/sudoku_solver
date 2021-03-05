@@ -112,3 +112,9 @@ def test_hint_extreme():
                  [9,6,1,5,3,7,2,8,4],
                  [2,8,7,4,1,9,6,3,5],
                  [3,4,5,2,8,6,1,7,9]]
+
+def test_filter():
+    assert sudoku.sudoku_filter([[1,2,3,0,0,0,1,0,8]]) == False
+
+def test_filter_2():
+    assert sudoku.sudoku_filter([[1,2,3,4,0,0,0,0,9]]) == True

@@ -40,3 +40,7 @@ When called, here's what happens:
 3. Parse through the copy_rows, at the first 0, take the index
 4. Use this index to get the solved answer, and insert it into the copy, and increase the hint counter to 1 so that the loop stops.
 5. Return the copied rows with the hint included.
+
+# Unsolvable Puzzle Detection:
+The solver needs to know when a puzzle is unsolvable, so that it can return information about it. A filter has been set up to identify mistyped puzzles. An example of this is a puzzle that has the number 1 repeated twice in the same row. This function will provide information about the error. Additional work is required to identify an unsolvable puzzle.
+

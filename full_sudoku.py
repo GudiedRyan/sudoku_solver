@@ -211,12 +211,14 @@ def sudoku_plumber(rows, fixed):
 
 def sudoku_king(rows):
     "The sudoku solver manager"
-    #for n in range(9):
+    #Test for errors:
+    if sudoku_filter(rows) == False:
+        return False
+    box_cleaner(boxes)
     n = 0
     while n < 9:
         m = 0
         while m < 9: 
-        #for m in range(9):
             if rows[n][m] == 0:
                 sudoku_solver(rows,n,m)
                 if len(change_list[-1][2]) == 0:
@@ -266,16 +268,50 @@ def sudoku_filter(rows):
             continue
         if len(no_zeroes) != len(set(no_zeroes)):
             # Activate kill switch
+            print(rows[n])
             return False
         continue
     # Check columns for dupes
+    create_columns(rows)
+    for n in range(len(columns)):
+        no_zeroes = []
+        for m in range(9):
+            if columns[n][m] != 0:
+                no_zeroes.append(columns[n][m])
+                continue
+            continue
+        if len(no_zeroes) != len(set(no_zeroes)):
+            # Activate kill switch
+            print(columns[n])
+            return False
+        continue
     # Check boxes for dupes
+    create_boxes(rows)
+    for n in range(9):
+        no_zeroes = []
+        for m in range(9):
+            if boxes[n][m] != 0:
+                no_zeroes.append(boxes[n][m])
+                continue
+            continue
+        if len(no_zeroes) != len(set(no_zeroes)):
+            print(boxes[n])
+            return False
+        continue
     return True
 
-# sudoku_king(test_puzzle_rows)
-# sudoku_king(easy_test)
-# sudoku_king(test_2)
-# sudoku_king(blanktest)
+# sudoku_king([[5,1,6,8,4,9,7,3,2],
+#                                [3,0,7,6,0,5,0,0,0],
+#                                [8,0,9,7,0,0,0,6,5],
+#                                [1,3,5,0,6,0,9,0,7],
+#                                [4,7,2,5,9,1,0,0,6],
+#                                [9,6,8,3,7,0,0,5,0],
+#                                [2,5,3,1,8,6,0,7,4],
+#                                [6,8,4,2,0,7,5,0,0],
+#                                [7,9,1,0,5,0,6,0,8]])
+
+####### So sudoku Filter will only be able to detect the issues, and I can fix it so it returns feedback based on whether it finds an error.
+# I will need to go back to the original idea.
 
 ######################### FUNCTION TWO ###########################
 # This will be the staging area for the additonal features. This first one will simply return a hint.

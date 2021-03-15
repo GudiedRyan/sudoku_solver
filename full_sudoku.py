@@ -60,6 +60,18 @@ blanktest = [[0,0,0,0,0,0,0,0,0],
              [0,0,0,0,0,0,0,0,0],
              [0,0,0,0,0,0,0,0,0]]
 
+fail_puzzle_rows = [[5,1,6,8,4,9,7,3,2],
+                    [3,0,7,6,0,5,0,0,0],
+                    [8,0,9,7,0,0,0,6,5],
+                    [1,3,5,0,6,0,9,0,7],
+                    [4,7,2,5,9,1,0,0,6],
+                    [9,6,8,3,7,0,0,5,0],
+                    [2,5,3,1,8,6,0,7,4],
+                    [6,8,4,2,0,7,5,0,0],
+                    [7,9,1,0,5,0,6,0,8]]
+
+
+
 columns = []
 boxes = [[],[],[],[],[],[],[],[],[]]
 def create_columns(rows):
@@ -236,16 +248,7 @@ def sudoku_king(rows):
     print(rows)      
     return rows
                 
-fail_puzzle_rows = [[5,3,6,0,7,0,0,0,0],
-                    [6,0,0,1,9,5,0,0,0],
-                    [0,9,8,0,0,0,0,6,0],
-                    [8,0,0,0,6,0,0,0,3],
-                    [4,0,0,8,0,3,0,0,1],
-                    [7,0,0,0,2,0,0,0,6],
-                    [0,6,0,0,0,0,2,8,0],
-                    [0,0,0,4,1,9,0,0,5],
-                    [0,0,0,0,8,0,0,7,9]]
-#sudoku_king(fail_puzzle_rows)
+
 
 ############################ PREVENTING INFINITE RUNTIME ################################
 # There will be a global variable, kill_switch set by default to false.
@@ -255,7 +258,7 @@ fail_puzzle_rows = [[5,3,6,0,7,0,0,0,0],
 # Problematic Puzzle checker
 #### Run checks that no rows, columns, or boxes have two of the same number in them. If they do, immediately activate kill_switch
 #### This will increase runtime sadly, but not so much so that it becomes unreasonable. This will NOT capture every fail, but it will
-#### stop obvious failures before they can begin. Actually it might solve them all.
+#### stop obvious failures before they can begin
 def sudoku_filter(rows):
     "Prevents us from wasting time on rubbish by identifying mistakes in puzzle"
     # Check rows for dupes
@@ -328,7 +331,8 @@ def sudoku_filter(rows):
 def sudoku_hint(rows):
     "Calls the solver and returns the puzzle with a hint"
     rows_copy = copy.deepcopy(rows)
-    sudoku_king(rows)
+    if sudoku_king(rows) is False:
+        return "Unsolvable Puzzle"
     for n in range(9):
         for m in range(9):
             if rows_copy[n][m] == 0:
@@ -342,3 +346,4 @@ def sudoku_hint(rows):
 
 #sudoku_hint(test_puzzle_rows)
 
+sudoku_king(fail_puzzle_rows)

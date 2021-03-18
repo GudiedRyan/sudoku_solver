@@ -70,57 +70,57 @@ fail_puzzle_rows = [[5,1,6,8,4,9,7,3,2],
                     [6,8,4,2,0,7,5,0,0],
                     [7,9,1,0,5,0,6,0,8]]
 
-
+# Create file, puzzle.py with all my tests in there
+# Remove continues
+# Remove global state/variables
+# Fix the variables names
 
 columns = []
 boxes = [[],[],[],[],[],[],[],[],[]]
+# Remove Global Variables ^
+
+# for i,m in lst:
+# Make the iterater nicer
+# use Puzzle as def, for like for row in puzzle
+# Don't use n and m
+
 def create_columns(rows):
-    "Translates the rows into columns"
     for n in range(9):
         column = []
         for m in range(9):
             column.insert(m, rows[m][n])
-            continue
         columns.insert(n, column)
-        continue
     return columns
 
+# Rework with MODULO, change names, get rid of global variables
+
 def create_boxes(rows):
-    "Translates the rows into the respective boxes"
     for n in range(3):
         for m in range(3):
             boxes[0].append(rows[n][m])
-            continue
         for m in range(3,6):
             boxes[1].append(rows[n][m])
-            continue
         for m in range(6,9):
             boxes[2].append(rows[n][m])
-            continue
     for n in range(3,6):
         for m in range(3):
             boxes[3].append(rows[n][m])
-            continue
         for m in range(3,6):
             boxes[4].append(rows[n][m])
-            continue
         for m in range(6,9):
             boxes[5].append(rows[n][m])
-            continue
     for n in range(6,9):
         for m in range(3):
             boxes[6].append(rows[n][m])
-            continue
         for m in range(3,6):
             boxes[7].append(rows[n][m])
-            continue
         for m in range(6,9):
             boxes[8].append(rows[n][m])
-            continue
     return boxes
 
+# similar rework and rethink the entire concept
+
 def identify_box(n,m):
-    "Determines which elements correspond to which box"
     if n in range(3):
         if m in range(3):
             return 0
@@ -148,7 +148,8 @@ columns = []
 boxes = [[],[],[],[],[],[],[],[],[]]
 possible_numbers = [1,2,3,4,5,6,7,8,9]
 change_list = []
-back_log = []
+
+# Fix box creater and this
 
 def box_cleaner(boxes):
     "Cleans out the box data to prevent false data from staying"
@@ -189,7 +190,7 @@ def sudoku_plumber(rows, fixed):
         # If somehow the list is empty and this function is called, then we need to exit before the program runs into an error.
         # In fact, this really shouldn't even be necessary. Need to rethink this.
         #print("Empty")
-        #return rows
+        #return False
     if fixed == True:
         return rows
     changes = change_list[-1]
@@ -346,4 +347,12 @@ def sudoku_hint(rows):
 
 #sudoku_hint(test_puzzle_rows)
 
-sudoku_king(fail_puzzle_rows)
+#sudoku_king(fail_puzzle_rows)
+
+
+
+# When I check to see if the change_list is empty, it returns and exits the function, or at least, should.
+# However, it is going into an infinite loop and I cannot determine why.
+# Here, let me tell you why Ryan.
+# You are calling plumber from within plumber.
+# So it exits plumber and goes back into plumber, which calls it again.

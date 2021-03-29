@@ -14,13 +14,22 @@ boxes = [[],[],[],[],[],[],[],[],[]]
 # Make the iterater nicer
 # use Puzzle as def, for like for row in puzzle
 # Don't use n and m
-
-def create_columns(rows):
+#OLD
+def create_columns(puzzle):
     for n in range(9):
         column = []
         for m in range(9):
-            column.insert(m, rows[m][n])
+            column.insert(m, puzzle[m][n])
         columns.insert(n, column)
+    return columns
+#NEW
+def generate_columns(puzzle):
+    columns = []
+    for row in range(9):
+        column = []
+        for number in range(9):
+            column.insert(number, puzzle[number][row])
+        columns.insert(row, column)
     return columns
 
 # Rework with MODULO, change names, get rid of global variables
@@ -47,6 +56,12 @@ def create_boxes(rows):
             boxes[7].append(rows[n][m])
         for m in range(6,9):
             boxes[8].append(rows[n][m])
+    return boxes
+
+
+def generate_boxes(puzzle):
+    boxes = []
+    
     return boxes
 
 # similar rework and rethink the entire concept
@@ -86,7 +101,6 @@ def box_cleaner(boxes):
     "Cleans out the box data to prevent false data from staying"
     for t in range(9):
         boxes[t].clear()
-        continue
     return boxes
 
 def sudoku_solver(rows,n,m):
@@ -235,15 +249,6 @@ def sudoku_filter(rows):
         continue
     return True
 
-# sudoku_king([[5,1,6,8,4,9,7,3,2],
-#                                [3,0,7,6,0,5,0,0,0],
-#                                [8,0,9,7,0,0,0,6,5],
-#                                [1,3,5,0,6,0,9,0,7],
-#                                [4,7,2,5,9,1,0,0,6],
-#                                [9,6,8,3,7,0,0,5,0],
-#                                [2,5,3,1,8,6,0,7,4],
-#                                [6,8,4,2,0,7,5,0,0],
-#                                [7,9,1,0,5,0,6,0,8]])
 
 ####### So sudoku Filter will only be able to detect the issues, and I can fix it so it returns feedback based on whether it finds an error.
 # I will need to go back to the original idea.
@@ -260,25 +265,24 @@ def sudoku_filter(rows):
 # 4. Use this index to get the solved answer, and stick this in
 # 5. Return the rows with the hint added in
 
-def sudoku_hint(rows):
+def sudoku_hint(puzzle):
     "Calls the solver and returns the puzzle with a hint"
-    rows_copy = copy.deepcopy(rows)
-    if sudoku_king(rows) is False:
+    puzzle_copy = copy.deepcopy(puzzle)
+    if sudoku_king(puzzle) is False:
         return "Unsolvable Puzzle"
-    for n in range(9):
-        for m in range(9):
-            if rows_copy[n][m] == 0:
-                rows_copy[n].pop(m)
-                rows_copy[n].insert(m,rows[n][m])
-                return rows_copy
+    for row in range(9):
+        for number in range(9):
+            if puzzle_copy[row][number] == 0:
+                puzzle_copy[row].pop(number)
+                puzzle_copy[row].insert(number,puzzle[row][number])
+                return puzzle_copy
             continue
         continue
-    print(rows_copy)
-    return rows_copy
+    print(puzzle_copy)
+    return puzzle_copy
 
-sudoku_hint(puzzle.test_puzzle_rows)
+#sudoku_hint(puzzle.test_puzzle_rows)
 
-#sudoku_king(fail_puzzle_rows)
 
 
 

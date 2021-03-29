@@ -1,4 +1,5 @@
 import full_sudoku as sudoku
+import puzzles as puzzles
 
 
 def test_columns():
@@ -189,3 +190,9 @@ def test_unsolvable():
                     [2,5,3,1,8,6,0,7,4],
                     [6,8,4,2,0,7,5,0,0],
                     [7,9,1,0,5,0,6,0,8]]) == False
+
+def test_new_columns():
+    assert sudoku.generate_columns(puzzles.test_solution) == puzzles.test_solution_columns
+
+def test_better_boxes():
+    pass

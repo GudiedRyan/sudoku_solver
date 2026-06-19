@@ -13,6 +13,7 @@ function App() {
   const [status, setStatus] = useState('idle')
   const [message, setMessage] = useState('')
   const [hintCount, setHintCount] = useState(0)
+  const [hintLoading, setHintLoading] = useState(false)
 
   const isSolved = useCallback(
     puzzle => puzzle && puzzle.every(row => row.every(cell => cell !== 0)),
@@ -95,6 +96,7 @@ function App() {
   const handleHint = async () => {
     if (status !== 'playing') return
     setMessage('')
+    setHintLoading(true)
     try {
       const data = await fetchHint(currentPuzzle)
       const next = data.puzzle
@@ -107,6 +109,8 @@ function App() {
       }
     } catch (e) {
       setMessage(e.message || 'Could not get hint')
+    } finally {
+      setHintLoading(false)
     }
   }
 
@@ -139,6 +143,7 @@ function App() {
         onSolve={handleSolve}
         status={status}
         hintCount={hintCount}
+        hintLoading={hintLoading}
       />
       {message && (
         <div className={`message ${status === 'solved' ? 'success' : status === 'error' ? 'error' : ''}`}>

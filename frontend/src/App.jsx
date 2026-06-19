@@ -14,6 +14,7 @@ function App() {
   const [message, setMessage] = useState('')
   const [hintCount, setHintCount] = useState(0)
   const [hintLoading, setHintLoading] = useState(false)
+  const [solveLoading, setSolveLoading] = useState(false)
 
   const isSolved = useCallback(
     puzzle => puzzle && puzzle.every(row => row.every(cell => cell !== 0)),
@@ -117,6 +118,7 @@ function App() {
   const handleSolve = async () => {
     if (status !== 'playing') return
     setMessage('')
+    setSolveLoading(true)
     try {
       const data = await fetchSolution(currentPuzzle)
       setCurrentPuzzle(data.solution)
@@ -125,6 +127,8 @@ function App() {
       setSelectedCell(null)
     } catch (e) {
       setMessage(e.message || 'Could not solve puzzle')
+    } finally {
+      setSolveLoading(false)
     }
   }
 
@@ -144,6 +148,7 @@ function App() {
         status={status}
         hintCount={hintCount}
         hintLoading={hintLoading}
+        solveLoading={solveLoading}
       />
       {message && (
         <div className={`message ${status === 'solved' ? 'success' : status === 'error' ? 'error' : ''}`}>

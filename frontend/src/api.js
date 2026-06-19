@@ -6,22 +6,22 @@ export async function fetchPuzzle(difficulty) {
   return res.json()
 }
 
-export async function fetchHint(puzzle) {
+export async function fetchHint(puzzle, puzzleId) {
   const res = await fetch(`${API_BASE}/hint`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ puzzle }),
+    body: JSON.stringify({ puzzle, puzzleId }),
   })
   const data = await res.json()
   if (!res.ok) throw new Error(data.error || 'Failed to get hint')
   return data
 }
 
-export async function fetchSolution(puzzle) {
+export async function fetchSolution(puzzle, puzzleId) {
   const res = await fetch(`${API_BASE}/solve`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ puzzle }),
+    body: JSON.stringify({ puzzle, puzzleId }),
   })
   const data = await res.json()
   if (!res.ok) throw new Error(data.error || 'Failed to solve puzzle')

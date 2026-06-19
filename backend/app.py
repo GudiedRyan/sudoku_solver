@@ -1,10 +1,22 @@
 import copy
 import os
+import uuid
 from flask import Flask, request, jsonify, send_from_directory
 import full_sudoku as fs
 from puzzles import get_puzzle
 
 app = Flask(__name__, static_folder='static', static_url_path='')
+
+# Maps puzzle_id -> solved grid, so repeat hints/solves on the same puzzle
+# can skip re-running the backtracking solver.
+SOLUTION_CACHE = {}
+
+
+def _matches_solution(puzzle, solution):
+    return all(
+        puzzle[r][c] == 0 or puzzle[r][c] == solution[r][c]
+        for r in range(9) for c in range(9)
+    )
 
 
 def _reset_solver():
@@ -30,8 +42,10 @@ def get_puzzle_route():
     difficulty = request.args.get('difficulty', 'medium')
     if difficulty not in ('easy', 'medium', 'hard'):
         difficulty = 'medium'
-    puzzle = get_puzzle(difficulty)
-    return jsonify({'puzzle': puzzle, 'difficulty': difficulty})
+    puzzle, solution = get_puzzle(difficulty)
+    puzzle_id = str(uuid.uuid4())
+    SOLUTION_CACHE[puzzle_id] = solution
+    return jsonify({'puzzle': puzzle, 'difficulty': difficulty, 'puzzleId': puzzle_id})
 
 
 @app.route('/api/hint', methods=['POST'])
@@ -39,7 +53,19 @@ def hint():
     data = request.get_json()
     if not data or 'puzzle' not in data:
         return jsonify({'error': 'Missing puzzle'}), 400
-    result = hint_puzzle(data['puzzle'])
+    puzzle = data['puzzle']
+
+    solution = SOLUTION_CACHE.get(data.get('puzzleId'))
+    if solution and _matches_solution(puzzle, solution):
+        next_puzzle = [row[:] for row in puzzle]
+        for r in range(9):
+            for c in range(9):
+                if next_puzzle[r][c] == 0:
+                    next_puzzle[r][c] = solution[r][c]
+                    return jsonify({'puzzle': next_puzzle})
+        return jsonify({'puzzle': next_puzzle})
+
+    result = hint_puzzle(puzzle)
     if result == 'Unsolvable Puzzle' or result is False:
         return jsonify({'error': 'Puzzle is unsolvable from current state'}), 400
     return jsonify({'puzzle': result})
@@ -50,7 +76,13 @@ def solve():
     data = request.get_json()
     if not data or 'puzzle' not in data:
         return jsonify({'error': 'Missing puzzle'}), 400
-    result = solve_puzzle(data['puzzle'])
+    puzzle = data['puzzle']
+
+    solution = SOLUTION_CACHE.get(data.get('puzzleId'))
+    if solution and _matches_solution(puzzle, solution):
+        return jsonify({'solution': copy.deepcopy(solution)})
+
+    result = solve_puzzle(puzzle)
     if result is False:
         return jsonify({'error': 'Puzzle is unsolvable from current state'}), 400
     return jsonify({'solution': result})

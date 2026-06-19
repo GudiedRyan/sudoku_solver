@@ -15,6 +15,7 @@ function App() {
   const [hintCount, setHintCount] = useState(0)
   const [hintLoading, setHintLoading] = useState(false)
   const [solveLoading, setSolveLoading] = useState(false)
+  const [puzzleId, setPuzzleId] = useState(null)
 
   const isSolved = useCallback(
     puzzle => puzzle && puzzle.every(row => row.every(cell => cell !== 0)),
@@ -30,6 +31,7 @@ function App() {
       const puzzle = data.puzzle.map(row => [...row])
       setOriginalPuzzle(puzzle.map(row => [...row]))
       setCurrentPuzzle(puzzle)
+      setPuzzleId(data.puzzleId)
       setHintCount(0)
       setStatus('playing')
     } catch {
@@ -99,7 +101,7 @@ function App() {
     setMessage('')
     setHintLoading(true)
     try {
-      const data = await fetchHint(currentPuzzle)
+      const data = await fetchHint(currentPuzzle, puzzleId)
       const next = data.puzzle
       setCurrentPuzzle(next)
       setHintCount(h => h + 1)
@@ -120,7 +122,7 @@ function App() {
     setMessage('')
     setSolveLoading(true)
     try {
-      const data = await fetchSolution(currentPuzzle)
+      const data = await fetchSolution(currentPuzzle, puzzleId)
       setCurrentPuzzle(data.solution)
       setStatus('solved')
       setMessage('Puzzle solved!')

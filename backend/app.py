@@ -1,9 +1,10 @@
 import copy
-from flask import Flask, request, jsonify
+import os
+from flask import Flask, request, jsonify, send_from_directory
 import full_sudoku as fs
 from puzzles import get_puzzle
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='')
 
 
 def _reset_solver():
@@ -53,6 +54,15 @@ def solve():
     if result is False:
         return jsonify({'error': 'Puzzle is unsolvable from current state'}), 400
     return jsonify({'solution': result})
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_frontend(path):
+    full_path = os.path.join(app.static_folder, path)
+    if path and os.path.isfile(full_path):
+        return send_from_directory(app.static_folder, path)
+    return send_from_directory(app.static_folder, 'index.html')
 
 
 if __name__ == '__main__':

@@ -1,20 +1,10 @@
 # Sudoku Solver
 
-Running the front and back end
+Running the front and back end is done together and can be run from the command line using the following:
 
-  Terminal 1 — Flask backend:
-  ```
-  cd backend
-  python app.py
-  ```
-  Runs on http://localhost:5000
+`python start.py`
 
-  Terminal 2 — React frontend:
-  ```
-  cd frontend
-  npm run dev
-  ```
-  Runs on http://localhost:5173 — Vite proxies /api calls to Flask automatically.
+Server is hosted on http://localhost:5000
 
 
 

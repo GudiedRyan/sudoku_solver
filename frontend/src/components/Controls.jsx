@@ -1,4 +1,4 @@
-function Controls({ difficulty, onDifficultyChange, onNewGame, onHint, onSolve, status, hintCount, hintLoading }) {
+function Controls({ difficulty, onDifficultyChange, onNewGame, onHint, onSolve, status, hintCount, hintLoading, solveLoading }) {
   const isPlaying = status === 'playing'
 
   return (
@@ -26,8 +26,14 @@ function Controls({ difficulty, onDifficultyChange, onNewGame, onHint, onSolve, 
           'Hint'
         )}
       </button>
-      <button className="btn" onClick={onSolve} disabled={!isPlaying}>
-        Solve
+      <button className="btn" onClick={onSolve} disabled={!isPlaying || solveLoading}>
+        {solveLoading ? (
+          <span className="btn-loading">
+            <span className="spinner" /> Solving...
+          </span>
+        ) : (
+          'Solve'
+        )}
       </button>
     </div>
   )

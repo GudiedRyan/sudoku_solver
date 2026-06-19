@@ -1,3 +1,23 @@
+# Sudoku Solver
+
+Running the front and back end
+
+  Terminal 1 — Flask backend:
+  ```
+  cd backend
+  python app.py
+  ```
+  Runs on http://localhost:5000
+
+  Terminal 2 — React frontend:
+  ```
+  cd frontend
+  npm run dev
+  ```
+  Runs on http://localhost:5173 — Vite proxies /api calls to Flask automatically.
+
+
+
 # sudoku_solver
 A program to solve sudoku puzzles.
 

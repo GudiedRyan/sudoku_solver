@@ -3,7 +3,7 @@ import os
 import uuid
 from flask import Flask, request, jsonify, send_from_directory
 import full_sudoku as fs
-from puzzles import get_puzzle
+from puzzles import get_puzzle, get_default_puzzle
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 
@@ -42,7 +42,8 @@ def get_puzzle_route():
     difficulty = request.args.get('difficulty', 'medium')
     if difficulty not in ('easy', 'medium', 'hard'):
         difficulty = 'medium'
-    puzzle, solution = get_puzzle(difficulty)
+    initial = request.args.get('initial') == 'true'
+    puzzle, solution = get_default_puzzle(difficulty) if initial else get_puzzle(difficulty)
     puzzle_id = str(uuid.uuid4())
     SOLUTION_CACHE[puzzle_id] = solution
     return jsonify({'puzzle': puzzle, 'difficulty': difficulty, 'puzzleId': puzzle_id})

@@ -22,12 +22,12 @@ function App() {
     []
   )
 
-  const loadPuzzle = useCallback(async diff => {
+  const loadPuzzle = useCallback(async (diff, initial = false) => {
     setStatus('loading')
     setSelectedCell(null)
     setMessage('')
     try {
-      const data = await fetchPuzzle(diff)
+      const data = await fetchPuzzle(diff, initial)
       const puzzle = data.puzzle.map(row => [...row])
       setOriginalPuzzle(puzzle.map(row => [...row]))
       setCurrentPuzzle(puzzle)
@@ -41,7 +41,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    loadPuzzle(difficulty)
+    loadPuzzle(difficulty, true)
   }, [])
 
   const handleCellSelect = (row, col) => {

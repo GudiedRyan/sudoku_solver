@@ -1,7 +1,7 @@
 const API_BASE = '/api'
 
-export async function fetchPuzzle(difficulty) {
-  const res = await fetch(`${API_BASE}/puzzle?difficulty=${difficulty}`)
+export async function fetchPuzzle(difficulty, initial = false) {
+  const res = await fetch(`${API_BASE}/puzzle?difficulty=${difficulty}${initial ? '&initial=true' : ''}`)
   if (!res.ok) throw new Error('Failed to fetch puzzle')
   return res.json()
 }

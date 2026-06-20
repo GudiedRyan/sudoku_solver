@@ -68,6 +68,16 @@ h1 {
   background: #90caf9 !important;
 }
 
+.cell.error {
+  background: #f8d7da !important;
+  color: #c62828 !important;
+  font-weight: 700;
+}
+
+.cell.error.selected {
+  background: #f1a7ad !important;
+}
+
 .cell.box-border-right {
   border-right: 3px solid #111;
 }

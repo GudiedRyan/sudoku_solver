@@ -89,6 +89,24 @@ def solve():
     return jsonify({'solution': result})
 
 
+@app.route('/api/check', methods=['POST'])
+def check_puzzle():
+    data = request.get_json()
+    if not data or 'puzzle' not in data:
+        return jsonify({'error': 'Missing puzzle'}), 400
+    puzzle = data['puzzle']
+
+    if fs.has_contradiction(puzzle):
+        return jsonify({'result': 'invalid'})
+
+    count, solution = fs.count_solutions(puzzle, limit=2)
+    if count == 0:
+        return jsonify({'result': 'unsolvable'})
+    if count == 1:
+        return jsonify({'result': 'unique', 'solution': solution})
+    return jsonify({'result': 'multiple'})
+
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_frontend(path):

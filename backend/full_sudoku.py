@@ -189,6 +189,73 @@ def sudoku_filter(rows):
     return True
 
 
+def has_contradiction(grid):
+    def has_dupes(values):
+        seen = [v for v in values if v != 0]
+        return len(seen) != len(set(seen))
+
+    for r in range(9):
+        if has_dupes(grid[r]):
+            return True
+    for c in range(9):
+        if has_dupes(grid[r][c] for r in range(9)):
+            return True
+    for br in range(3):
+        for bc in range(3):
+            cells = [grid[br * 3 + r][bc * 3 + c] for r in range(3) for c in range(3)]
+            if has_dupes(cells):
+                return True
+    return False
+
+
+def count_solutions(grid, limit=2):
+    grid = [row[:] for row in grid]
+    rows = [set() for _ in range(9)]
+    cols = [set() for _ in range(9)]
+    boxes = [set() for _ in range(9)]
+    empties = []
+    for r in range(9):
+        for c in range(9):
+            v = grid[r][c]
+            if v != 0:
+                rows[r].add(v)
+                cols[c].add(v)
+                boxes[(r // 3) * 3 + c // 3].add(v)
+            else:
+                empties.append((r, c))
+
+    count = 0
+    solution = None
+
+    def backtrack(idx):
+        nonlocal count, solution
+        if count >= limit:
+            return
+        if idx == len(empties):
+            count += 1
+            if solution is None:
+                solution = [row[:] for row in grid]
+            return
+        r, c = empties[idx]
+        b = (r // 3) * 3 + c // 3
+        for v in range(1, 10):
+            if v not in rows[r] and v not in cols[c] and v not in boxes[b]:
+                rows[r].add(v)
+                cols[c].add(v)
+                boxes[b].add(v)
+                grid[r][c] = v
+                backtrack(idx + 1)
+                grid[r][c] = 0
+                rows[r].discard(v)
+                cols[c].discard(v)
+                boxes[b].discard(v)
+                if count >= limit:
+                    return
+
+    backtrack(0)
+    return count, solution
+
+
 def sudoku_hint(puzzle):
     puzzle_copy = copy.deepcopy(puzzle)
     if sudoku_king(puzzle) is False:

@@ -226,33 +226,51 @@ def count_solutions(grid, limit=2):
 
     count = 0
     solution = None
+    remaining = set(empties)
 
-    def backtrack(idx):
+    def candidates(r, c):
+        b = (r // 3) * 3 + c // 3
+        return [v for v in range(1, 10) if v not in rows[r] and v not in cols[c] and v not in boxes[b]]
+
+    def backtrack():
         nonlocal count, solution
         if count >= limit:
             return
-        if idx == len(empties):
+        if not remaining:
             count += 1
             if solution is None:
                 solution = [row[:] for row in grid]
             return
-        r, c = empties[idx]
-        b = (r // 3) * 3 + c // 3
-        for v in range(1, 10):
-            if v not in rows[r] and v not in cols[c] and v not in boxes[b]:
-                rows[r].add(v)
-                cols[c].add(v)
-                boxes[b].add(v)
-                grid[r][c] = v
-                backtrack(idx + 1)
-                grid[r][c] = 0
-                rows[r].discard(v)
-                cols[c].discard(v)
-                boxes[b].discard(v)
-                if count >= limit:
-                    return
 
-    backtrack(0)
+        best_cell = None
+        best_candidates = None
+        for r, c in remaining:
+            cands = candidates(r, c)
+            if not cands:
+                return
+            if best_candidates is None or len(cands) < len(best_candidates):
+                best_cell, best_candidates = (r, c), cands
+                if len(cands) == 1:
+                    break
+
+        r, c = best_cell
+        b = (r // 3) * 3 + c // 3
+        remaining.discard((r, c))
+        for v in best_candidates:
+            rows[r].add(v)
+            cols[c].add(v)
+            boxes[b].add(v)
+            grid[r][c] = v
+            backtrack()
+            grid[r][c] = 0
+            rows[r].discard(v)
+            cols[c].discard(v)
+            boxes[b].discard(v)
+            if count >= limit:
+                break
+        remaining.add((r, c))
+
+    backtrack()
     return count, solution
 
 

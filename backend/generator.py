@@ -1,4 +1,3 @@
-import copy
 import random
 
 import full_sudoku as fs
@@ -49,11 +48,9 @@ def generate_solved_grid():
     return _shuffle_grid(_base_grid())
 
 
-def _is_solvable(puzzle):
-    fs.columns = []
-    fs.boxes = [[], [], [], [], [], [], [], [], []]
-    fs.change_list = []
-    return fs.sudoku_king(copy.deepcopy(puzzle)) is not False
+def _is_unique(puzzle):
+    count, _ = fs.count_solutions(puzzle, limit=2)
+    return count == 1
 
 
 def generate_puzzle(difficulty='medium'):
@@ -71,7 +68,7 @@ def generate_puzzle(difficulty='medium'):
             break
         saved = puzzle[r][c]
         puzzle[r][c] = 0
-        if _is_solvable(puzzle):
+        if _is_unique(puzzle):
             removed += 1
         else:
             puzzle[r][c] = saved

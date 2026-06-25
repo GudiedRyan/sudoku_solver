@@ -1,5 +1,5 @@
 import copy
-import puzzles as puzzle
+import archive.puzzles as puzzle
 
 # Create file, puzzle.py with all my tests in there
 # Remove continues

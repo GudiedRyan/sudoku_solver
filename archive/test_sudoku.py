@@ -1,5 +1,5 @@
-import full_sudoku as sudoku
-import puzzles as puzzles
+import archive.full_sudoku as sudoku
+import archive.puzzles as puzzles
 
 
 def test_columns():

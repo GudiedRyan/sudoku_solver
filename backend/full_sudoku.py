@@ -189,6 +189,91 @@ def sudoku_filter(rows):
     return True
 
 
+def has_contradiction(grid):
+    def has_dupes(values):
+        seen = [v for v in values if v != 0]
+        return len(seen) != len(set(seen))
+
+    for r in range(9):
+        if has_dupes(grid[r]):
+            return True
+    for c in range(9):
+        if has_dupes(grid[r][c] for r in range(9)):
+            return True
+    for br in range(3):
+        for bc in range(3):
+            cells = [grid[br * 3 + r][bc * 3 + c] for r in range(3) for c in range(3)]
+            if has_dupes(cells):
+                return True
+    return False
+
+
+def count_solutions(grid, limit=2):
+    grid = [row[:] for row in grid]
+    rows = [set() for _ in range(9)]
+    cols = [set() for _ in range(9)]
+    boxes = [set() for _ in range(9)]
+    empties = []
+    for r in range(9):
+        for c in range(9):
+            v = grid[r][c]
+            if v != 0:
+                rows[r].add(v)
+                cols[c].add(v)
+                boxes[(r // 3) * 3 + c // 3].add(v)
+            else:
+                empties.append((r, c))
+
+    count = 0
+    solution = None
+    remaining = set(empties)
+
+    def candidates(r, c):
+        b = (r // 3) * 3 + c // 3
+        return [v for v in range(1, 10) if v not in rows[r] and v not in cols[c] and v not in boxes[b]]
+
+    def backtrack():
+        nonlocal count, solution
+        if count >= limit:
+            return
+        if not remaining:
+            count += 1
+            if solution is None:
+                solution = [row[:] for row in grid]
+            return
+
+        best_cell = None
+        best_candidates = None
+        for r, c in remaining:
+            cands = candidates(r, c)
+            if not cands:
+                return
+            if best_candidates is None or len(cands) < len(best_candidates):
+                best_cell, best_candidates = (r, c), cands
+                if len(cands) == 1:
+                    break
+
+        r, c = best_cell
+        b = (r // 3) * 3 + c // 3
+        remaining.discard((r, c))
+        for v in best_candidates:
+            rows[r].add(v)
+            cols[c].add(v)
+            boxes[b].add(v)
+            grid[r][c] = v
+            backtrack()
+            grid[r][c] = 0
+            rows[r].discard(v)
+            cols[c].discard(v)
+            boxes[b].discard(v)
+            if count >= limit:
+                break
+        remaining.add((r, c))
+
+    backtrack()
+    return count, solution
+
+
 def sudoku_hint(puzzle):
     puzzle_copy = copy.deepcopy(puzzle)
     if sudoku_king(puzzle) is False:

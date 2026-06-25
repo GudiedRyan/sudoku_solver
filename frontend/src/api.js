@@ -17,6 +17,17 @@ export async function fetchHint(puzzle, puzzleId) {
   return data
 }
 
+export async function checkPuzzle(puzzle) {
+  const res = await fetch(`${API_BASE}/check`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ puzzle }),
+  })
+  const data = await res.json()
+  if (!res.ok) throw new Error(data.error || 'Failed to check puzzle')
+  return data
+}
+
 export async function fetchSolution(puzzle, puzzleId) {
   const res = await fetch(`${API_BASE}/solve`, {
     method: 'POST',

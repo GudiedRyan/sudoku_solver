@@ -3,7 +3,7 @@ services:
     name: sudoku-solver
     runtime: python
     buildCommand: "pip install -r requirements.txt && cd frontend && npm ci && npm run build"
-    startCommand: "gunicorn --chdir backend --workers 1 app:app"
+    startCommand: "gunicorn --chdir backend --workers 1 --bind 0.0.0.0:$PORT app:app"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9

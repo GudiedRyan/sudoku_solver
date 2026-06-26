@@ -4,6 +4,10 @@
   padding: 0;
 }
 
+:root {
+  --cell: clamp(36px, calc((100vw - 2rem) / 9), 52px);
+}
+
 body {
   font-family: 'Georgia', serif;
   background: #f0f0f0;
@@ -29,20 +33,20 @@ h1 {
 
 .board {
   display: grid;
-  grid-template-columns: repeat(9, 52px);
+  grid-template-columns: repeat(9, var(--cell));
   border: 3px solid #111;
 }
 
 /* ── Cell ─────────────────────────────────── */
 
 .cell {
-  width: 52px;
-  height: 52px;
+  width: var(--cell);
+  height: var(--cell);
   border: 1px solid #bbb;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
+  font-size: calc(var(--cell) * 0.48);
   cursor: pointer;
   user-select: none;
   background: #fff;
@@ -167,13 +171,13 @@ h1 {
 
 .number-pad {
   display: grid;
-  grid-template-columns: repeat(5, 52px);
+  grid-template-columns: repeat(5, var(--cell));
   gap: 0.4rem;
 }
 
 .num-btn {
-  height: 44px;
-  font-size: 1.2rem;
+  height: calc(var(--cell) * 0.85);
+  font-size: calc(var(--cell) * 0.42);
   font-family: inherit;
   border: 2px solid #333;
   border-radius: 4px;
@@ -218,5 +222,23 @@ h1 {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* ── Mobile ───────────────────────────────── */
+
+@media (max-width: 520px) {
+  .app {
+    padding: 1rem 0.5rem;
+    gap: 0.9rem;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .btn, .difficulty-select {
+    font-size: 0.9rem;
+    padding: 0.45rem 0.9rem;
   }
 }

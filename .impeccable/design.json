@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-26T00:00:00Z",
+  "title": "Design System: Sudoku",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Steel Authority",
+        "canonical": "oklch(0.41 0.15 264)",
+        "tonalRamp": ["#060d21", "#0d1c3e", "#152e66", "#1565c0", "#3b7cd8", "#6a9ce3", "#a2bdee", "#d4e4f8"]
+      },
+      "accent-deep": {
+        "role": "primary",
+        "displayName": "Deep Authority",
+        "canonical": "oklch(0.34 0.15 264)",
+        "tonalRamp": ["#060c1e", "#0b1736", "#122754", "#0d47a1", "#2d63c0", "#5a85d6", "#98b4e8", "#d0dcf5"]
+      },
+      "page": {
+        "role": "neutral",
+        "displayName": "Field Gray",
+        "canonical": "oklch(0.95 0 0)",
+        "tonalRamp": ["#111111", "#222222", "#3a3a3a", "#555555", "#707070", "#9a9a9a", "#c5c5c5", "#f0f0f0"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface White",
+        "canonical": "oklch(1 0 0)",
+        "tonalRamp": ["#141414", "#252525", "#3d3d3d", "#5c5c5c", "#7a7a7a", "#a0a0a0", "#cbcbcb", "#ffffff"]
+      },
+      "surface-given": {
+        "role": "neutral",
+        "displayName": "Clue Gray",
+        "canonical": "oklch(0.89 0 0)",
+        "tonalRamp": ["#101010", "#1f1f1f", "#363636", "#575757", "#757575", "#9e9e9e", "#c4c4c4", "#e2e2e2"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Grid Ink",
+        "canonical": "oklch(0.12 0 0)",
+        "tonalRamp": ["#111111", "#2a2a2a", "#424242", "#5e5e5e", "#7a7a7a", "#999999", "#c0c0c0", "#eeeeee"]
+      },
+      "state-selected": {
+        "role": "primary",
+        "displayName": "Selection Blue",
+        "canonical": "oklch(0.81 0.10 240)",
+        "tonalRamp": ["#0d1b2d", "#1d3558", "#2e5491", "#4577c0", "#6699de", "#90caf9", "#b8dcff", "#dbeeff"]
+      },
+      "state-same": {
+        "role": "primary",
+        "displayName": "Sibling Tint",
+        "canonical": "oklch(0.93 0.04 240)",
+        "tonalRamp": ["#0e1926", "#1b3151", "#2c5191", "#4577c0", "#6fa0dd", "#9dc8f3", "#c0dffb", "#dbeeff"]
+      },
+      "state-error-bg": {
+        "role": "tertiary",
+        "displayName": "Error Field",
+        "canonical": "oklch(0.87 0.05 12)",
+        "tonalRamp": ["#2d0608", "#5a0c10", "#8c1218", "#c41922", "#e24d56", "#f08086", "#f7b4b9", "#fde9eb"]
+      },
+      "state-error-ink": {
+        "role": "tertiary",
+        "displayName": "Error Ink",
+        "canonical": "oklch(0.45 0.18 22)",
+        "tonalRamp": ["#200205", "#430409", "#6e0910", "#a00f19", "#c62828", "#df5f5f", "#f0a0a0", "#fbd8d8"]
+      },
+      "feedback-warn-bg": {
+        "role": "tertiary",
+        "displayName": "Warn Field",
+        "canonical": "oklch(0.96 0.06 90)",
+        "tonalRamp": ["#1f1500", "#3d2a00", "#6b4700", "#a87000", "#d69800", "#f0c040", "#f8df90", "#fff3cd"]
+      },
+      "feedback-success-bg": {
+        "role": "secondary",
+        "displayName": "Success Field",
+        "canonical": "oklch(0.90 0.05 145)",
+        "tonalRamp": ["#051208", "#0b2410", "#124018", "#1a5e24", "#238030", "#3ea64d", "#82cc90", "#d4edda"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Page heading only — the word 'Sudoku'. Wide letter-spacing creates presence without size inflation." },
+      "body": { "displayName": "Body", "purpose": "All controls, button labels, messages, difficulty selector. The workhorse size." },
+      "label": { "displayName": "Label", "purpose": "Number pad buttons, inline loading text. Same size as body; context distinguishes role." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "cell-transition", "value": "background-color 0.08s", "purpose": "Cell state changes (selection, hover). Fastest transition — cells change frequently." },
+      { "name": "button-transition", "value": "background-color 0.12s, color 0.12s", "purpose": "Button hover fill transitions." },
+      { "name": "numpad-transition", "value": "background-color 0.1s, color 0.1s", "purpose": "Number pad button hover transitions." },
+      { "name": "spinner", "value": "spin 0.6s linear infinite", "purpose": "Loading spinner rotation during async operations (hint, solve, check)." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "520px", "purpose": "Below this: reduced padding, smaller heading (1.6rem), smaller button font (0.9rem). The --cell variable handles board scaling automatically." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Used for initiating actions: New Game, Check Puzzle. One per control group.",
+      "html": "<button class=\"ds-btn-primary\">New Game</button>",
+      "css": ".ds-btn-primary { background: #1565c0; color: #fff; border: 2px solid #1565c0; border-radius: 4px; padding: 0.5rem 1.25rem; font-family: Georgia, serif; font-size: 1rem; cursor: pointer; transition: background-color 0.12s, border-color 0.12s, color 0.12s; } .ds-btn-primary:hover { background: #0d47a1; border-color: #0d47a1; } .ds-btn-primary:focus-visible { outline: 2px solid #1565c0; outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.38; cursor: not-allowed; }"
+    },
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button-default",
+      "description": "Secondary actions: Hint, Solve, Create Puzzle, Back to Play, Clear Grid.",
+      "html": "<button class=\"ds-btn\">Hint</button>",
+      "css": ".ds-btn { background: #fff; color: #111; border: 2px solid #333; border-radius: 4px; padding: 0.5rem 1.25rem; font-family: Georgia, serif; font-size: 1rem; cursor: pointer; transition: background-color 0.12s, color 0.12s; } .ds-btn:hover:not(:disabled) { background: #333; color: #fff; } .ds-btn:focus-visible { outline: 2px solid #333; outline-offset: 2px; } .ds-btn:disabled { opacity: 0.38; cursor: not-allowed; }"
+    },
+    {
+      "name": "Cell — User Filled",
+      "kind": "custom",
+      "refersTo": "cell-user-filled",
+      "description": "A cell the user has entered a digit into. Blue accent marks the user's work.",
+      "html": "<div class=\"ds-cell ds-cell--user-filled\">7</div>",
+      "css": ".ds-cell { width: 52px; height: 52px; border: 1px solid #bbb; display: flex; align-items: center; justify-content: center; font-family: Georgia, serif; font-size: 25px; background: #fff; color: #111; cursor: pointer; user-select: none; transition: background-color 0.08s; } .ds-cell--user-filled { color: #1565c0; font-weight: 400; } .ds-cell--given { background: #e2e2e2; font-weight: 700; color: #111; cursor: default; } .ds-cell--selected { background: #90caf9 !important; } .ds-cell--same { background: #dbeeff; } .ds-cell--error { background: #f8d7da !important; color: #c62828 !important; font-weight: 700; }"
+    },
+    {
+      "name": "Cell — Given Clue",
+      "kind": "custom",
+      "refersTo": "cell-given",
+      "description": "A locked clue cell provided with the puzzle. Heavier weight + gray background marks immutability — two independent signals.",
+      "html": "<div class=\"ds-cell ds-cell--given\">5</div>",
+      "css": ".ds-cell-given-standalone { width: 52px; height: 52px; border: 1px solid #bbb; display: flex; align-items: center; justify-content: center; font-family: Georgia, serif; font-size: 25px; background: #e2e2e2; color: #111; font-weight: 700; cursor: default; user-select: none; }"
+    },
+    {
+      "name": "Cell — Error State",
+      "kind": "custom",
+      "refersTo": "cell-error",
+      "description": "A cell containing a digit that conflicts with another in its row, column, or box. Color AND text weight both change — color is never the sole error signal.",
+      "html": "<div class=\"ds-cell ds-cell--error\">7</div>",
+      "css": ".ds-cell-error-standalone { width: 52px; height: 52px; border: 1px solid #bbb; display: flex; align-items: center; justify-content: center; font-family: Georgia, serif; font-size: 25px; background: #f8d7da; color: #c62828; font-weight: 700; cursor: pointer; user-select: none; }"
+    },
+    {
+      "name": "Number Pad Button",
+      "kind": "button",
+      "refersTo": "num-btn",
+      "description": "One of ten input buttons (1–9 plus Clear) below the board. Scales with the --cell variable.",
+      "html": "<button class=\"ds-num-btn\">5</button>",
+      "css": ".ds-num-btn { width: 52px; height: 44px; font-family: Georgia, serif; font-size: 22px; border: 2px solid #333; border-radius: 4px; background: #fff; color: #111; cursor: pointer; transition: background-color 0.1s, color 0.1s; display: flex; align-items: center; justify-content: center; } .ds-num-btn:hover:not(:disabled) { background: #333; color: #fff; } .ds-num-btn:focus-visible { outline: 2px solid #333; outline-offset: 2px; } .ds-num-btn:disabled { opacity: 0.38; cursor: not-allowed; }"
+    },
+    {
+      "name": "Message — Warning",
+      "kind": "custom",
+      "refersTo": "message-warn",
+      "description": "Informational status message: hints used, puzzle loading, ambiguous puzzle states.",
+      "html": "<div class=\"ds-message ds-message--warn\">Puzzle not yet solved — keep going.</div>",
+      "css": ".ds-message { font-family: Georgia, serif; font-size: 1rem; padding: 0.5rem 1.25rem; border-radius: 4px; } .ds-message--warn { background: #fff3cd; border: 1px solid #ffc107; color: #7a5700; } .ds-message--success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; font-size: 1.2rem; font-weight: 700; } .ds-message--error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }"
+    },
+    {
+      "name": "Message — Success",
+      "kind": "custom",
+      "refersTo": "message-success",
+      "description": "Puzzle completion feedback. Larger and bolder than other messages — the completion moment earns emphasis.",
+      "html": "<div class=\"ds-message ds-message--success\">Puzzle solved!</div>",
+      "css": ".ds-message-success-standalone { font-family: Georgia, serif; font-size: 1.2rem; font-weight: 700; padding: 0.5rem 1.25rem; border-radius: 4px; background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Ruled Grid",
+    "overview": "The Ruled Grid is a design vocabulary derived from the logic of the puzzle itself. The 9×9 board is not dressed up — it is the interface. Every design decision defers to a single question: does this serve the act of solving? The aesthetic is that of technical drawing — precise ink on a neutral field, not warm, not decorative, not themed.\n\nThis system rejects the overcrowded game-UI aesthetic — badges, streaks, score counters, pop-up overlays, dark-pattern mechanics — as categorically wrong for what this product is. It equally rejects the generic SaaS template: rounded card grids, gradient buttons, and the reflexive institutional blue that signals 'used a UI kit.' The grid already has strong enough visual logic that the interface needs only to clarify it, not decorate it.\n\nAs a portfolio project, the design proves technical judgment through restraint. The signal is in the states — selected, given, error, success — each distinct and deliberate, each communicating without ornamentation.",
+    "keyCharacteristics": [
+      "Single-page tool with zero navigation chrome; the board is the whole screen",
+      "Cell states are the primary visual vocabulary — six distinct states, each communicating something specific about the puzzle",
+      "One accent color, used only where the user acts or initiates action",
+      "Completely flat; depth conveyed by tonal contrast and border weight alone",
+      "One font family carries every typographic role: heading, controls, messages, grid digits"
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "#1565c0 appears in exactly two roles: user-filled digit color, and primary button background. It marks where the user is and what the user can do. Apply it to a decorative element and the semantic contract breaks.", "section": "colors" },
+      { "name": "The Two-Signal Error Rule", "body": "Error states always change both background color AND text/border color. Color alone is not a sufficient indicator (WCAG 1.4.1). The cell error state (#f8d7da bg + #c62828 text) and the error message (#f8d7da bg + #721c24 text) both enforce this.", "section": "colors" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces never lift. box-shadow is prohibited at all scales. The grid's depth comes from the structural weight of its ink, not from simulated light sources. If you feel the urge to add a shadow, add tonal contrast or border weight instead.", "section": "elevation" },
+      { "name": "The One Family Rule", "body": "No secondary font is introduced. Georgia carries the heading, the controls, the messages, and the grid digits. Mixing sans-serif controls into a serif frame breaks the One-Voice system.", "section": "typography" },
+      { "name": "The Weight Contrast Rule", "body": "Given clues (700 weight) and user-filled digits (400 weight) differ in weight AND color. Never communicate immutability through color alone.", "section": "typography" }
+    ],
+    "dos": [
+      "Do reserve #1565c0 (Steel Authority) for user-filled digit color and primary action buttons only",
+      "Do use 3px solid #111111 for board and box boundaries, 1px #bbbbbb for cell boundaries — this contrast is structural",
+      "Do derive any grid-adjacent sizing from the --cell custom property",
+      "Do mark errors with both background color AND text color change (WCAG 1.4.1)",
+      "Do maintain the weight distinction between given cells (700) and user-filled cells (400)",
+      "Do keep focus indicators visible: 2px solid accent at 2px offset for primary, 2px solid #333333 for default"
+    ],
+    "donts": [
+      "Don't add box-shadow to any surface — the system is completely flat",
+      "Don't add a second typeface — Georgia is the only family",
+      "Don't use border-left or border-right greater than 1px as a colored accent on any container",
+      "Don't apply #1565c0 to inactive states, decorative elements, or icons",
+      "Don't round the board's corners — border-radius: 0 on .board is intentional",
+      "Don't introduce the mobile-game aesthetic: no badges, streaks, achievements, or reward animations",
+      "Don't use gradient text, glassmorphism, or decorative blur effects",
+      "Don't use identical card grids, gradient buttons, or side-stripe bordered callouts",
+      "Don't merge or omit cell states — each state communicates specific puzzle information"
+    ]
+  }
+}

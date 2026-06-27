@@ -8,6 +8,17 @@ import './App.css'
 const emptyGrid = () => Array.from({ length: 9 }, () => Array(9).fill(0))
 
 function App() {
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('theme')
+    if (saved) return saved === 'dark'
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  })
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = darkMode ? 'dark' : 'light'
+    localStorage.setItem('theme', darkMode ? 'dark' : 'light')
+  }, [darkMode])
+
   const [mode, setMode] = useState('play')
   const [originalPuzzle, setOriginalPuzzle] = useState(null)
   const [currentPuzzle, setCurrentPuzzle] = useState(null)
@@ -228,6 +239,13 @@ function App() {
 
   return (
     <div className="app">
+      <button
+        className="btn btn-theme-toggle"
+        onClick={() => setDarkMode(d => !d)}
+        aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+      >
+        {darkMode ? 'Light Mode' : 'Dark Mode'}
+      </button>
       <h1>Sudoku</h1>
       <Controls
         mode={mode}

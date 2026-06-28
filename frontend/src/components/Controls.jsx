@@ -76,8 +76,6 @@ function Controls({
           <span className="btn-loading">
             <span className="spinner" /> Thinking...
           </span>
-        ) : hintCount > 0 ? (
-          `Hint (${hintCount})`
         ) : (
           'Hint'
         )}

@@ -239,13 +239,17 @@ function App() {
 
   return (
     <div className="app">
-      <button
-        className="btn btn-theme-toggle"
-        onClick={() => setDarkMode(d => !d)}
+      <label
+        className="theme-toggle"
         aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
       >
-        {darkMode ? 'Light Mode' : 'Dark Mode'}
-      </button>
+        <input
+          type="checkbox"
+          checked={darkMode}
+          onChange={() => setDarkMode(d => !d)}
+        />
+        <span className="theme-toggle-track" />
+      </label>
       <h1>Sudoku</h1>
       <Controls
         mode={mode}
@@ -280,6 +284,9 @@ function App() {
           />
           {(mode === 'create' || status === 'playing') && (
             <NumberPad onNumber={fillCell} disabled={isNumberPadDisabled} />
+          )}
+          {mode === 'play' && hintCount > 0 && (
+            <p className="hints-tally">Hints used: {hintCount}</p>
           )}
         </>
       )}

@@ -1,5 +1,6 @@
 import copy
 import os
+import random
 import uuid
 from flask import Flask, request, jsonify, send_from_directory
 import full_sudoku as fs
@@ -59,11 +60,10 @@ def hint():
     solution = SOLUTION_CACHE.get(data.get('puzzleId'))
     if solution and _matches_solution(puzzle, solution):
         next_puzzle = [row[:] for row in puzzle]
-        for r in range(9):
-            for c in range(9):
-                if next_puzzle[r][c] == 0:
-                    next_puzzle[r][c] = solution[r][c]
-                    return jsonify({'puzzle': next_puzzle})
+        empty_cells = [(r, c) for r in range(9) for c in range(9) if next_puzzle[r][c] == 0]
+        if empty_cells:
+            r, c = random.choice(empty_cells)
+            next_puzzle[r][c] = solution[r][c]
         return jsonify({'puzzle': next_puzzle})
 
     result = hint_puzzle(puzzle)

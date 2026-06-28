@@ -1,4 +1,5 @@
 import copy
+import random
 
 columns = []
 boxes = [[],[],[],[],[],[],[],[],[]]
@@ -278,12 +279,8 @@ def sudoku_hint(puzzle):
     puzzle_copy = copy.deepcopy(puzzle)
     if sudoku_king(puzzle) is False:
         return "Unsolvable Puzzle"
-    for row in range(9):
-        for number in range(9):
-            if puzzle_copy[row][number] == 0:
-                puzzle_copy[row].pop(number)
-                puzzle_copy[row].insert(number, puzzle[row][number])
-                return puzzle_copy
-            continue
-        continue
+    empty_cells = [(r, c) for r in range(9) for c in range(9) if puzzle_copy[r][c] == 0]
+    if empty_cells:
+        r, c = random.choice(empty_cells)
+        puzzle_copy[r][c] = puzzle[r][c]
     return puzzle_copy

@@ -6,12 +6,97 @@
 
 :root {
   --cell: clamp(36px, calc((100vw - 2rem) / 9), 52px);
+
+  /* ── Accent ────────────────────────────────────────────────────── */
+  --color-accent:        oklch(0.40 0.20 264);
+  --color-accent-hover:  oklch(0.32 0.17 264);
+
+  /* ── Neutral surfaces — tinted 0.008 chroma toward accent hue ─── */
+  --color-page:          oklch(0.95 0.008 264);
+  --color-surface:       oklch(1 0 0);
+  --color-surface-given: oklch(0.89 0.006 264);
+
+  /* ── Ink ────────────────────────────────────────────────────────── */
+  --color-ink:           oklch(0.13 0 0);
+  --color-ink-body:      oklch(0.20 0 0);
+
+  /* ── Borders ────────────────────────────────────────────────────── */
+  --color-border-cell:   oklch(0.76 0 0);
+  --color-border-ui:     oklch(0.25 0 0);
+
+  /* ── Cell states ────────────────────────────────────────────────── */
+  --color-state-same:        oklch(0.93 0.035 248);
+  --color-state-selected:    oklch(0.82 0.10 248);
+  --color-state-hover:       oklch(0.96 0.012 248);
+  --color-state-error-bg:    oklch(0.88 0.05 14);
+  --color-state-error-ink:   oklch(0.43 0.20 22);
+  --color-state-error-sel:   oklch(0.82 0.08 14);
+
+  /* ── Feedback messages ──────────────────────────────────────────── */
+  --color-warn-bg:         oklch(0.97 0.06 88);
+  --color-warn-border:     oklch(0.80 0.14 88);
+  --color-warn-ink:        oklch(0.42 0.10 78);
+  --color-success-bg:      oklch(0.93 0.06 145);
+  --color-success-border:  oklch(0.80 0.12 145);
+  --color-success-ink:     oklch(0.36 0.14 145);
+  --color-error-bg:        oklch(0.88 0.05 14);
+  --color-error-border:    oklch(0.77 0.09 14);
+  --color-error-ink:       oklch(0.35 0.16 22);
+
+  /* ── Motion ─────────────────────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+
+  color-scheme: light;
+}
+
+/* ── Dark mode ────────────────────────────────────────────────────── */
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Accent — lightened so it reads on dark surfaces (≥5:1 on dark cell bg) */
+  --color-accent:        oklch(0.70 0.18 264);
+  --color-accent-hover:  oklch(0.77 0.16 264);
+
+  /* Neutral surfaces — tinted toward accent hue, stepped for depth */
+  --color-page:          oklch(0.12 0.010 264);
+  --color-surface:       oklch(0.18 0.008 264);
+  --color-surface-given: oklch(0.23 0.006 264);
+
+  /* Ink */
+  --color-ink:           oklch(0.94 0 0);
+  --color-ink-body:      oklch(0.84 0 0);
+
+  /* Borders */
+  --color-border-cell:   oklch(0.30 0 0);
+  --color-border-ui:     oklch(0.68 0 0);
+
+  /* Cell states */
+  --color-state-same:        oklch(0.22 0.035 248);
+  --color-state-selected:    oklch(0.30 0.10 248);
+  --color-state-hover:       oklch(0.20 0.012 248);
+  --color-state-error-bg:    oklch(0.24 0.05 14);
+  --color-state-error-ink:   oklch(0.78 0.18 22);
+  --color-state-error-sel:   oklch(0.28 0.08 14);
+
+  /* Feedback messages */
+  --color-warn-bg:         oklch(0.20 0.06 88);
+  --color-warn-border:     oklch(0.55 0.14 88);
+  --color-warn-ink:        oklch(0.82 0.10 78);
+  --color-success-bg:      oklch(0.18 0.06 145);
+  --color-success-border:  oklch(0.50 0.12 145);
+  --color-success-ink:     oklch(0.78 0.14 145);
+  --color-error-bg:        oklch(0.22 0.05 14);
+  --color-error-border:    oklch(0.45 0.09 14);
+  --color-error-ink:       oklch(0.78 0.16 22);
 }
 
 body {
   font-family: 'Georgia', serif;
-  background: #f0f0f0;
-  color: #222;
+  background: var(--color-page);
+  color: var(--color-ink-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .app {
@@ -25,8 +110,11 @@ body {
 
 h1 {
   font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1.1;
   letter-spacing: 0.15em;
-  color: #111;
+  color: var(--color-ink);
+  text-wrap: balance;
 }
 
 /* ── Board ────────────────────────────────── */
@@ -34,7 +122,7 @@ h1 {
 .board {
   display: grid;
   grid-template-columns: repeat(9, var(--cell));
-  border: 3px solid #111;
+  border: 3px solid var(--color-ink);
 }
 
 /* ── Cell ─────────────────────────────────── */
@@ -42,52 +130,58 @@ h1 {
 .cell {
   width: var(--cell);
   height: var(--cell);
-  border: 1px solid #bbb;
+  border: 1px solid var(--color-border-cell);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: calc(var(--cell) * 0.48);
   cursor: pointer;
   user-select: none;
-  background: #fff;
+  background: var(--color-surface);
+  color: var(--color-ink);
   transition: background-color 0.08s;
 }
 
 .cell.given {
-  background: #e2e2e2;
+  background: var(--color-surface-given);
   font-weight: 700;
-  color: #111;
+  color: var(--color-ink);
   cursor: default;
 }
 
 .cell.user-filled {
-  color: #1565c0;
+  color: var(--color-accent);
 }
 
 .cell.same-number {
-  background: #dbeeff;
+  background: var(--color-state-same);
 }
 
 .cell.selected {
-  background: #90caf9 !important;
+  background: var(--color-state-selected) !important;
 }
 
 .cell.error {
-  background: #f8d7da !important;
-  color: #c62828 !important;
+  background: var(--color-state-error-bg) !important;
+  color: var(--color-state-error-ink) !important;
   font-weight: 700;
 }
 
 .cell.error.selected {
-  background: #f1a7ad !important;
+  background: var(--color-state-error-sel) !important;
 }
 
 .cell.box-border-right {
-  border-right: 3px solid #111;
+  border-right: 3px solid var(--color-ink);
 }
 
 .cell.box-border-bottom {
-  border-bottom: 3px solid #111;
+  border-bottom: 3px solid var(--color-ink);
+}
+
+/* Hover only on interactive (non-given, non-selected) cells */
+.cell:not(.given):not(.selected):hover {
+  background: var(--color-state-hover);
 }
 
 /* ── Controls ─────────────────────────────── */
@@ -104,26 +198,48 @@ h1 {
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
   font-family: inherit;
-  border: 2px solid #333;
+  border: 2px solid var(--color-border-ui);
   border-radius: 4px;
-  background: #fff;
+  background: var(--color-surface);
+  color: var(--color-ink);
   cursor: pointer;
+}
+
+.difficulty-select:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .btn {
   padding: 0.5rem 1.25rem;
   font-size: 1rem;
   font-family: inherit;
-  border: 2px solid #333;
+  border: 2px solid var(--color-border-ui);
   border-radius: 4px;
-  background: #fff;
+  background: var(--color-surface);
+  color: var(--color-ink);
   cursor: pointer;
-  transition: background-color 0.12s, color 0.12s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.12s var(--ease-out),
+    color 0.12s var(--ease-out),
+    border-color 0.12s var(--ease-out);
 }
 
 .btn:hover:not(:disabled) {
-  background: #333;
-  color: #fff;
+  background: var(--color-border-ui);
+  color: var(--color-surface);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-border-ui);
+  outline-offset: 2px;
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .btn:disabled {
@@ -132,14 +248,19 @@ h1 {
 }
 
 .btn-primary {
-  background: #1565c0;
-  color: #fff;
-  border-color: #1565c0;
+  background: var(--color-accent);
+  color: var(--color-surface);
+  border-color: var(--color-accent);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #0d47a1;
-  border-color: #0d47a1;
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 /* ── Messages ─────────────────────────────── */
@@ -148,23 +269,23 @@ h1 {
   font-size: 1rem;
   padding: 0.5rem 1.25rem;
   border-radius: 4px;
-  background: #fff3cd;
-  border: 1px solid #ffc107;
-  color: #7a5700;
+  background: var(--color-warn-bg);
+  border: 1px solid var(--color-warn-border);
+  color: var(--color-warn-ink);
 }
 
 .message.success {
-  background: #d4edda;
-  color: #155724;
-  border-color: #c3e6cb;
+  background: var(--color-success-bg);
+  color: var(--color-success-ink);
+  border-color: var(--color-success-border);
   font-size: 1.2rem;
   font-weight: bold;
 }
 
 .message.error {
-  background: #f8d7da;
-  color: #721c24;
-  border-color: #f5c6cb;
+  background: var(--color-error-bg);
+  color: var(--color-error-ink);
+  border-color: var(--color-error-border);
 }
 
 /* ── Number pad ───────────────────────────── */
@@ -176,19 +297,35 @@ h1 {
 }
 
 .num-btn {
-  height: calc(var(--cell) * 0.85);
+  /* min-height ensures 44px touch target on narrow viewports */
+  height: max(calc(var(--cell) * 0.85), 44px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: calc(var(--cell) * 0.42);
   font-family: inherit;
-  border: 2px solid #333;
+  border: 2px solid var(--color-border-ui);
   border-radius: 4px;
-  background: #fff;
+  background: var(--color-surface);
+  color: var(--color-ink);
   cursor: pointer;
-  transition: background-color 0.1s, color 0.1s;
+  transition:
+    background-color 0.1s var(--ease-out),
+    color 0.1s var(--ease-out);
 }
 
 .num-btn:hover:not(:disabled) {
-  background: #333;
-  color: #fff;
+  background: var(--color-border-ui);
+  color: var(--color-surface);
+}
+
+.num-btn:focus-visible {
+  outline: 2px solid var(--color-border-ui);
+  outline-offset: 2px;
+}
+
+.num-btn:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .num-btn:disabled {
@@ -209,11 +346,12 @@ h1 {
   gap: 0.4rem;
 }
 
+/* currentColor adapts to primary (white text) and default (dark text) buttons */
 .spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(0, 0, 0, 0.25);
-  border-top-color: #333;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
   border-radius: 50%;
   display: inline-block;
   animation: spin 0.6s linear infinite;
@@ -223,6 +361,17 @@ h1 {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* ── Theme toggle ────────────────────────── */
+
+.btn-theme-toggle {
+  position: fixed;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
+  z-index: 100;
 }
 
 /* ── Mobile ───────────────────────────────── */
@@ -240,5 +389,26 @@ h1 {
   .btn, .difficulty-select {
     font-size: 0.9rem;
     padding: 0.45rem 0.9rem;
+  }
+}
+
+/* ── Reduced motion ───────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .cell,
+  .btn,
+  .num-btn {
+    transition: none;
+  }
+
+  .btn:active:not(:disabled),
+  .num-btn:active:not(:disabled) {
+    transform: none;
+  }
+
+  .spinner {
+    animation: none;
+    border: 2px solid currentColor;
+    opacity: 0.5;
   }
 }
